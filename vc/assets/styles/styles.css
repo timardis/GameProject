@@ -1,0 +1,39 @@
+canvas{
+	background: white;
+	margin-top: 10px;
+	border: 1px solid black;
+	-webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.container .jumbotron{
+	padding: 30px;
+	margin: 0px;
+}
+
+.container .jumbotron h1, h2, h3, h4, h5, h6{
+	margin: 0px;
+	letter-spacing: 1px;
+	display: inline;
+	color: #47148B;
+}
+.container .jumbotron h1{
+	font-family: 'Patua One', cursive;
+}
+
+.container .jumbotron h2{
+	font-family: 'Lobster', Helvetica, Arial, serif;
+}
+
+
+.container{
+	margin: 30px auto 30px auto;
+	padding: 0px;
+	width: 1086px;
+}
+
+body{
+	padding-top: 0px;
+	background: url(/images/darkdenim3.png) repeat 0 0;
+}
