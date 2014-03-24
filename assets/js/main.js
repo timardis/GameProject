@@ -1,3 +1,8 @@
+/*
+*	main.js: Front-end javaScript for the main game page
+*	
+*/
+
 var canvas, stage, title, cards = []
 var index = 0
 var interval
@@ -7,16 +12,13 @@ function init() {
 	stage.autoClear = false
 	stage.enableDOMEvents(true)
 
-	
-	stage.addChild(title)
-
     init_cards()
 
  	cards_spritesheet.addEventListener('complete', function(){
  		interval = setInterval(display_card, 40)
  	})
- //    createjs.Ticker.setInterval(500)
-	// createjs.Ticker.addEventListener("tick", stage)
+	//	createjs.Ticker.setInterval(500)
+	//	createjs.Ticker.addEventListener("tick", stage)
 }
 
 var cards_spritesheet = new createjs.SpriteSheet({
@@ -43,6 +45,9 @@ function display_card(){
 }
 
 // Initialize array of card Sprites
+// It's a mess because of the way the cards 
+// are arranged on the sprite sheet
+// 
 function init_cards() {
 	for(var i = 0; i < 52; i++)
 	{
@@ -58,11 +63,4 @@ function init_cards() {
 			return false
 	}
 	return true
-}
-
-function get_card(index) {
-	if(0 <= index && index < 52)
-		return cards[index]
-	else
-		return false
 }
