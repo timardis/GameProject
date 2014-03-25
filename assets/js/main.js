@@ -14,6 +14,8 @@ function init() {
 
     init_cards()
 
+    //display_card_array(handcards)
+
  	cards_spritesheet.addEventListener('complete', function(){
  		interval = setInterval(display_card, 40)
  	})
@@ -27,6 +29,20 @@ var cards_spritesheet = new createjs.SpriteSheet({
 	frames: {width:73, height:98}
 })
 
+//	experimental helper function
+function display_card_array(array){
+	for(var i = 0; i < array.length; i++){
+		var card_index = array[i]
+		
+		cards[card_index].x = 400 + i * 15
+		cards[card_index].y = 300
+		stage.addChild(cards[card_index])
+	}
+
+	stage.update()
+}
+
+//	experimental helper function to show deck of cards
 function display_card(){
 	if(index > 51)
 	{
@@ -61,6 +77,8 @@ function init_cards() {
 			cards.push(new createjs.Sprite(cards_spritesheet, (i+1)%13 + 26))
 		else
 			return false
+
+		cards[i].paused = true;
 	}
 	return true
 }

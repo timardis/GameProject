@@ -37,7 +37,8 @@ module.exports.routes = {
   // }
 
   '/': {
-    view: 'main'
+    controller: 'MainController',
+    action: 'index'
   }
   /*
   // But what if you want your home page to display
