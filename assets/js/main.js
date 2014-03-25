@@ -16,6 +16,8 @@ function init() {
 
     //display_card_array(handcards)
 
+    print_debug_text()
+
  	cards_spritesheet.addEventListener('complete', function(){
 		index = 0;
  		var interval = setInterval(display_card, 40)
@@ -33,9 +35,16 @@ var cards_spritesheet = new createjs.SpriteSheet({
 //	helper function for printing out text for debug purposes
 function print_debug_text() {
 	var text
-	socket.get('/', {message: 'hi there!'}, function (res){
+	socket.get('/', {message: 'the view said hi!'}, function (res){
+		text = res.message
 
+		var t = new createjs.Text(text, '14px Tacoma', 'black')
+		t.x = 400
+		t.y = 400
+		stage.addChild(t)
+		stage.update()
 	})
+
 }
 
 //	experimental helper function
