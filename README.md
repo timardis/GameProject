@@ -1,2 +1,2 @@
-# vc 2.0
+# VC 2.0
 ### a Sails application
