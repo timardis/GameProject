@@ -4,8 +4,8 @@
 */
 
 var canvas, stage, title, cards = []
-var index = 0
-var interval
+var index, interval
+
 function init() {
 	canvas = document.getElementById('gameCanvas')
 	stage = new createjs.Stage(canvas)
@@ -17,7 +17,8 @@ function init() {
     //display_card_array(handcards)
 
  	cards_spritesheet.addEventListener('complete', function(){
- 		interval = setInterval(display_card, 40)
+		index = 0;
+ 		var interval = setInterval(display_card, 40)
  	})
 	//	createjs.Ticker.setInterval(500)
 	//	createjs.Ticker.addEventListener("tick", stage)
@@ -29,8 +30,16 @@ var cards_spritesheet = new createjs.SpriteSheet({
 	frames: {width:73, height:98}
 })
 
+//	helper function for printing out text for debug purposes
+function print_debug_text() {
+	var text
+	socket.get('/', {message: 'hi there!'}, function (res){
+
+	})
+}
+
 //	experimental helper function
-function display_card_array(array){
+function display_card_array(array) {
 	for(var i = 0; i < array.length; i++){
 		var card_index = array[i]
 		

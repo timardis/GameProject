@@ -19,9 +19,19 @@
 var MainController = {
     
   index: function(req, res){
-  	res.view()
-  },
 
+  	//	Request sent over socket, a.k.a. from front-end javaScript
+  	if(req.isSocket)
+  	{
+
+  	}
+
+  	//	Request
+  	else
+  	{
+  		res.view()
+  	}
+  },
 
   /**
    * Overrides for the settings in `config/controllers.js`
