@@ -10,9 +10,23 @@ module.exports = {
 
   attributes: {
   	
-  	/* e.g.
-  	nickname: 'string'
-  	*/
+  	suit: 'string',
+
+  	value: 'integer',
+
+  	handId: 'integer',
+
+  	comboId: 'integer',
+
+  	playerId: 'integer',
+
+  	deckId: 'integer',
+
+  	stackId: 'integer',
+
+  	owner: function() {
+
+  	}
     
   }
 
