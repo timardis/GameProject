@@ -10,9 +10,34 @@ module.exports = {
 
   attributes: {
   	
-  	/* e.g.
-  	nickname: 'string'
-  	*/
+  	// Unique identifier for this card
+    // Default: -1
+    handId: 'integer',
+
+    // Id of the player this hand belongs to
+    // Default: -1
+  	playerId: 'integer',
+
+  	// Call a function on the cards in the hand
+  	cards: function(cb) {
+  		Card.findByHandId(this.handId).done(function(err, cards) {
+  			cb(cards);
+  		});
+  	},
+
+  	// Call a function on the combo in the hand
+  	combo: function(cb) {
+  		Combo.findOneByHandId(this.handId).done(function(err, combo) {
+  			cb(combo);
+  		});
+  	},
+
+  	// Call a function on the player this hand belongs to
+  	playerOwner: function(cb) {
+  		Player.findOneByHandId(this.handId).done(function(err, player) {
+  			cb(player);
+  		});
+  	}
     
   }
 
