@@ -10,9 +10,14 @@ module.exports = {
 
   attributes: {
   	
-  	/* e.g.
-  	nickname: 'string'
-  	*/
+  	deckId: 'integer',
+
+  	// Call a function on the cards in the deck
+  	cards: function(cb) {
+  		Card.findByDeckId(this.deckId).done(function(err, cards) {
+  			cb(cards);
+  		});
+  	}
     
   }
 
