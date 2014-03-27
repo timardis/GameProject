@@ -22,8 +22,6 @@ function init() {
     getPlayers()
     //displayCardArray(handcards)
 
-    printDebugText()
-
  	cardsSpriteSheet.addEventListener('complete', function(){
 		index = 0
  		var interval = setInterval(displayCard, 40)
@@ -36,7 +34,13 @@ function sendPlayerInfo(playerName) {
 	var playerInfo = {
 		name: 'Cuong Ngo'
 	}
-	socket.emit('player info', playerInfo)
+	socket.get('/', {
+		request: 'player info'
+		name: 'Cuong Ngo'
+	})
+	socket.on('got player info', function(msg) {
+		printDebugText('message from server: ' + msg)
+	})
 }
 
 //	Get players from the server
@@ -49,18 +53,12 @@ function getPlayers() {
 }
 
 //	helper function for printing out text for debug purposes
-function printDebugText() {
-	var text
-	socket.get('/', {message: 'the view said hi!'}, function (res){
-		text = res.message
-
-		var t = new createjs.Text(text, '14px Tacoma', 'black')
-		t.x = 400
-		t.y = 400
-		stage.addChild(t)
-		stage.update()
-	})
-
+function printDebugText(str) {
+	var t = new createjs.Text(str, '14px Tacoma', 'black')
+	t.x = 400
+	t.y = 400
+	stage.addChild(t)
+	stage.update()
 }
 
 //	experimental helper function

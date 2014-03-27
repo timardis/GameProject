@@ -32,6 +32,10 @@ var MainController = {
   	//	Request for view
   	else
   	{
+      Box.create({
+        
+      })
+      initEventListeners()
   		res.view()
   	}
   },
@@ -46,5 +50,12 @@ var MainController = {
 
   
 };
+
+function initEventListeners() {
+  sails.io.on('player info', function(data) {
+    var msg = 'success message'
+    socket.emit('got player info', msg)
+  })
+}
 
 module.exports = MainController
