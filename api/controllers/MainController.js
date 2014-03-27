@@ -23,8 +23,9 @@ var MainController = {
   	//	Request sent over socket, a.k.a. from front-end javaScript
   	if(req.isSocket)
   	{
+      var str = res.name
   		res.json({
-  			message: 'success! res = ' + req.param('name')
+  			message: 'success! res = ' + req.param('message')
   		})
   	}
 

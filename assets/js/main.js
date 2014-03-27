@@ -34,7 +34,7 @@ function init() {
 //	
 function sendPlayerInfo(playerName) {
 	var playerInfo = {
-		name: playerName
+		name: 'Cuong Ngo'
 	}
 	socket.emit('player info', playerInfo)
 }
