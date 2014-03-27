@@ -24,16 +24,18 @@ var MainController = {
   	if(req.isSocket)
   	{
   		res.json({
-  			message: 'success! message: ' + req.param('message')
+  			message: 'success! res = ' + req.param('name')
   		})
   	}
 
-  	//	Request
+  	//	Request for view
   	else
   	{
   		res.view()
   	}
   },
+
+
 
   /**
    * Overrides for the settings in `config/controllers.js`
