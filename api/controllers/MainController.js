@@ -23,18 +23,24 @@ var MainController = {
   	//	Request sent over socket, a.k.a. from front-end javaScript
   	if(req.isSocket)
   	{
-      var str = res.name
-  		res.json({
-  			message: 'success! res = ' + req.param('message')
-  		})
+      var flag = req.param('flag')
+      if(flag = 'player info') {
+        Player.create({
+          playerName: req.param('name'),
+          playerId: 'req.socket.id',
+          tableId: 1
+          }).done(function(err, player) {
+
+          })
+      }
+      Player.find('req.socket.id').exec(function(err, player) {
+        res.json(player)
+      })
   	}
 
   	//	Request for view
   	else
   	{
-      Box.create({
-        
-      })
       initEventListeners()
   		res.view()
   	}

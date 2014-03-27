@@ -16,6 +16,11 @@ function init() {
 	stage.autoClear = false
 	stage.enableDOMEvents(true)
 
+	console.log({
+		'name': 'ojsodjo',
+		'id': 'djsodjosj'
+	})
+
     initCards()
     sendPlayerInfo('Cuong Ngo')
 
@@ -35,11 +40,10 @@ function sendPlayerInfo(playerName) {
 		name: 'Cuong Ngo'
 	}
 	socket.get('/', {
-		request: 'player info'
-		name: 'Cuong Ngo'
-	})
-	socket.on('got player info', function(msg) {
-		printDebugText('message from server: ' + msg)
+		'flag': 'player info',
+		'name': 'Cuong Ngo'
+	}, function(data) {
+		console.log(data)
 	})
 }
 
@@ -91,7 +95,13 @@ function displayCard(){
 		index++
 	}
 }
-
+//	Initialize socket.io event listeners
+//
+function initEventListeners() {
+	socket.on('all players', function(data) {
+		console.log(data)
+	})
+}
 
 //	Initialize array of card Sprites
 //	It's a mess because of the way the cards 
