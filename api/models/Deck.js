@@ -10,9 +10,27 @@ module.exports = {
 
   attributes: {
   	
-  	/* e.g.
-  	nickname: 'string'
-  	*/
+  	// Unique identifier for this card
+    // Default: 1
+  	deckId: 'integer',
+
+  	// Id of the table this deck belongs to
+    // Default: 1
+  	tableId: 'integer',
+
+  	// Call a function on the cards in the deck
+  	cards: function(cb) {
+  		Card.findByDeckId(this.deckId).done(function(err, cards) {
+  			cb(cards);
+  		});
+  	},
+
+  	// Call a function on the table this deck belongs to
+  	tableOwner: function(cb) {
+  		Table.findOneByTableId(this.tableId).done(function(err, table) {
+  			cb(table);
+  		});
+  	}
     
   }
 
