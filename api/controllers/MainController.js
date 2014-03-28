@@ -35,6 +35,12 @@ var MainController = {
   	}
   },
 
+  echo: function(req, res) {
+    res.json({
+      message: 'Echo clicked!'
+    })
+  },
+
 
 
   /**

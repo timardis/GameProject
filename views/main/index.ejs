@@ -21,9 +21,17 @@
 <div class="control-group">
   <label class="control-label" for="playButton"></label>
   <div class="controls">
-    <button id="playButton" name="playButton" class="btn btn-primary">Play!</button>
+    <button id="playButton" name="playButton" onclick="onClick()" class="btn btn-primary">Play!</button>
   </div>
 </div>
 
 </div>
 </div>
+
+<script>
+function onClick() {
+	socket.get('/main/echo', {}, function (response) {
+		console.log(response);
+	});
+}
+</script>
