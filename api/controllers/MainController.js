@@ -41,8 +41,12 @@ var MainController = {
       playerId: req.socket.handshake.sessionID
     })
 
+    Player.findOneByPlayerId(req.socket.handshake.sessionID).done(function(err, player) {
+      console.log("Player found!")
+    })
+
     res.json({
-      message: req.param('name') + req.socket.handshake.sessionID
+      message: req.param('name')
     })
   },
 
