@@ -23,25 +23,14 @@ var MainController = {
   	//	Request sent over socket, a.k.a. from front-end javaScript
   	if(req.isSocket)
   	{
-      var flag = req.param('flag')
-      if(flag = 'player info') {
-        Player.create({
-          playerName: req.param('name'),
-          playerId: 'req.socket.id',
-          tableId: 1
-          }).done(function(err, player) {
-
-          })
-      }
-      Player.find('req.socket.id').exec(function(err, player) {
-        res.json(player)
+      res.json({
+        message: 'test message'
       })
   	}
 
   	//	Request for view
   	else
   	{
-      initEventListeners()
   		res.view()
   	}
   },
@@ -57,11 +46,5 @@ var MainController = {
   
 };
 
-function initEventListeners() {
-  sails.io.on('player info', function(data) {
-    var msg = 'success message'
-    socket.emit('got player info', msg)
-  })
-}
 
 module.exports = MainController
