@@ -12,9 +12,9 @@ module.exports = {
   	
   	// Unique identifier for this player
     // Default: -1
-    id: 'STRING',
+    playerId: 'STRING',
 
-    playerName: 'integer',
+    playerName: 'string',
 
     // Id of the table this deck belongs to
     // Default: 1
