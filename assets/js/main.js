@@ -3,7 +3,11 @@
 *	
 */
 
-var canvas, stage, title, cards = []
+//	Global variables
+var canvas, stage, title,
+	players = [],
+	cardsSpriteSheet,
+	cards = []
 var index, interval
 
 function init() {
@@ -12,56 +16,70 @@ function init() {
 	stage.autoClear = false
 	stage.enableDOMEvents(true)
 
-    init_cards()
-
-    //display_card_array(handcards)
-
-    print_debug_text()
-
- 	cards_spritesheet.addEventListener('complete', function(){
-		index = 0;
- 		var interval = setInterval(display_card, 40)
- 	})
-	//	createjs.Ticker.setInterval(500)
-	//	createjs.Ticker.addEventListener("tick", stage)
-}
-
-var cards_spritesheet = new createjs.SpriteSheet({
-	framerate: 20,
-	images: ["../images/cards-sprite.png"],
-	frames: {width:73, height:98}
-})
-
-//	helper function for printing out text for debug purposes
-function print_debug_text() {
-	var text
-	socket.get('/', {message: 'the view said hi!'}, function (res){
-		text = res.message
-
-		var t = new createjs.Text(text, '14px Tacoma', 'black')
-		t.x = 400
-		t.y = 400
-		stage.addChild(t)
-		stage.update()
+	console.log({
+		'name': 'ojsodjo',
+		'id': 'djsodjosj'
 	})
 
+    initCards()
+    sendPlayerInfo('Cuong Ngo')
+
+    getPlayers()
+    //displayCardArray(handcards)
+
+ 	cardsSpriteSheet.addEventListener('complete', function(){
+		index = 0
+ 		var interval = setInterval(displayCard, 40)
+ 	})
+}
+
+//	Send player information
+//	
+function sendPlayerInfo(playerName) {
+	var playerInfo = {
+		name: 'Cuong Ngo'
+	}
+	socket.get('/', {
+		'flag': 'player info',
+		'name': 'Cuong Ngo'
+	}, function(data) {
+		console.log(data)
+	})
+}
+
+//	Get players from the server
+//	
+function getPlayers() {
+	socket.on('start game', function(data) {
+		//	should get a 'players' array
+		players = data.players
+	})
+}
+
+//	helper function for printing out text for debug purposes
+function printDebugText(str) {
+	var t = new createjs.Text(str, '14px Tacoma', 'black')
+	t.x = 400
+	t.y = 400
+	stage.addChild(t)
+	stage.update()
 }
 
 //	experimental helper function
-function display_card_array(array) {
+function displayCardArray(array) {
 	for(var i = 0; i < array.length; i++){
-		var card_index = array[i]
+		var cardIndex = array[i]
 		
-		cards[card_index].x = 400 + i * 15
-		cards[card_index].y = 300
-		stage.addChild(cards[card_index])
+		cards[cardIndex].x = 400 + i * 15
+		cards[cardIndex].y = 300
+		stage.addChild(cards[cardIndex])
 	}
 
 	stage.update()
 }
 
 //	experimental helper function to show deck of cards
-function display_card(){
+function displayCard(){
 	if(index > 51)
 	{
 		clearInterval(interval)
@@ -77,26 +95,39 @@ function display_card(){
 		index++
 	}
 }
+//	Initialize socket.io event listeners
+//
+function initEventListeners() {
+	socket.on('all players', function(data) {
+		console.log(data)
+	})
+}
 
-// Initialize array of card Sprites
-// It's a mess because of the way the cards 
-// are arranged on the sprite sheet
+//	Initialize array of card Sprites
+//	It's a mess because of the way the cards 
+//	are arranged on the sprite image
 // 
-function init_cards() {
+function initCards() {
+	cardsSpriteSheet = new createjs.SpriteSheet({
+		framerate: 20,
+		images: ["../images/cards-sprite.png"],
+		frames: {width:73, height:98}
+	})
+
 	for(var i = 0; i < 52; i++)
 	{
 		if(i < 13)
-			cards.push(new createjs.Sprite(cards_spritesheet, (i+1)%13 + 13))
+			cards.push(new createjs.Sprite(cardsSpriteSheet, (i+1)%13 + 13))
 		else if(13 <= i && i < 26)
-			cards.push(new createjs.Sprite(cards_spritesheet, (i+1)%13))
+			cards.push(new createjs.Sprite(cardsSpriteSheet, (i+1)%13))
 		else if(26 <= i && i < 39)
-			cards.push(new createjs.Sprite(cards_spritesheet, (i+1)%13 + 39))
+			cards.push(new createjs.Sprite(cardsSpriteSheet, (i+1)%13 + 39))
 		else if(39 <= i && i < 52)
-			cards.push(new createjs.Sprite(cards_spritesheet, (i+1)%13 + 26))
+			cards.push(new createjs.Sprite(cardsSpriteSheet, (i+1)%13 + 26))
 		else
 			return false
 
-		cards[i].paused = true;
+		cards[i].paused = true
 	}
 	return true
 }

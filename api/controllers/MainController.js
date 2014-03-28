@@ -23,17 +23,19 @@ var MainController = {
   	//	Request sent over socket, a.k.a. from front-end javaScript
   	if(req.isSocket)
   	{
-  		res.json({
-  			message: 'success! message: ' + req.param('message')
-  		})
+      res.json({
+        message: 'test message'
+      })
   	}
 
-  	//	Request
+  	//	Request for view
   	else
   	{
   		res.view()
   	}
   },
+
+
 
   /**
    * Overrides for the settings in `config/controllers.js`
@@ -43,5 +45,6 @@ var MainController = {
 
   
 };
+
 
 module.exports = MainController
