@@ -35,9 +35,14 @@ var MainController = {
   	}
   },
 
-  echo: function(req, res) {
+  newPlayer: function(req, res) {
+    Player.create({
+      playerName: req.param('name'),
+      playerId: req.socket.handshake.sessionID
+    })
+
     res.json({
-      message: 'Echo clicked!'
+      message: req.param('name') + req.socket.handshake.sessionID
     })
   },
 
