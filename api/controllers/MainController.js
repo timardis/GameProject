@@ -62,6 +62,9 @@ var MainController = {
          playerId: req.socket.id
       }).done(function(){
         console.log('Removed player')
+        Player.findByTableId(1).done(function(err, players) {
+          console.log('Total number of players: ' + players.length)
+        })
       })
     })
   },
