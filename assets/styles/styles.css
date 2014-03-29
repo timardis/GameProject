@@ -8,11 +8,8 @@ canvas{
 }
 
 #login-page {
+	width: 250px;
 	margin: 30px auto 30px auto;
-	border: 1px solid black;
-	-webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
 }
 
 .container .jumbotron{

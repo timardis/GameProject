@@ -2,11 +2,11 @@
 <div class='jumbotron'>
 
 <h1> VC 2.0 </h1><h2>a modified version of the card game VC</h2>
-
+<div></div>
 <canvas id='gameCanvas' width='1024' height='576'>
 </canvas>
 
-<div width="300" id="login-page">
+<div id="login-page">
 <!-- Text input-->
 <div class="control-group">
   <label class="control-label" for="textinput">Username</label>
@@ -24,13 +24,12 @@
   </div>
 </div>
 </div>
+
 <script>
 $("#gameCanvas").hide();
 $( "#playButton" ).click(function() {
-  $( "#login-page" ).hide( "slow", function() {
-  	$("#gameCanvas").show("slow", function() {
-  		init()
-  	});
+  $( "#login-page" ).hide(150, function() {
+  	$("#gameCanvas").show(500, init);
   });
 });
 </script>
