@@ -38,7 +38,7 @@ var MainController = {
   newPlayer: function(req, res) {
     Player.create({
       playerName: req.param('name'),
-      playerId: req.socket.handshake.sessionID
+      playerId: req.socket.id
     }).done(function(err, player) {
       Player.findByTableId(1).done(function(err, players) {
         
@@ -51,8 +51,17 @@ var MainController = {
         //    })
         // }
         
-        console.log('New player ' + player.playerName + ' found!');
+        console.log('New player ' + player.playerName + ' playerId: ' + player.playerId + ' found!');
         console.log('Total number of players is ' + players.length + '!');
+      })
+    })
+
+    req.socket.on('disconnect', function() {
+      console.log('Player from ' + req.socket.id + ' disconnected')
+      Player.destroy({
+         playerId: req.socket.id
+      }).done(function(){
+        console.log('Removed player')
       })
     })
   },
