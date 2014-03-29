@@ -15,14 +15,14 @@ module.exports = {
   	comboId: {
       type: 'INTEGER',
       defaultsTo: -1
-    }
+    },
 
     // Type of this combo ('repeat', 'straight', 'chop')
     // Default: 'undefined'
   	type: {
       type: 'STRING',
       defaultsTo: 'undefined'
-    }
+    },
 
     // Length of this combo:
     // For a straight or chop type, this will be the length of the run
@@ -31,7 +31,7 @@ module.exports = {
   	length: {
       type: 'INTEGER',
       defaultsTo: 0
-    }
+    },
 
     // Value of the hand for comparison purposes
     // This will be the value of the highest card in the combo
@@ -39,21 +39,21 @@ module.exports = {
   	compareValue: {
       type: 'INTEGER',
       defaultsTo: -1
-    }
+    },
 
     // Id of the hand this card belongs to
     // Default: -1
   	handId: {
       type: 'INTEGER',
       defaultsTo: -1
-    }
+    },
 
     // Id of the stack this card belongs to
     // Default: 1
   	stackId: {
       type: 'INTEGER',
       defaultsTo: 1
-    }
+    },
 
   	// Call a function on the hand this card belongs to
   	handOwner: function(cb) {

@@ -15,14 +15,14 @@ module.exports = {
     handId: {
       type: 'INTEGER',
       defaultsTo: -1
-    }
+    },
 
     // Id of the player this hand belongs to
     // Default: 'undefined'
   	playerId: {
       type: 'STRING',
       defaultsTo: 'undefined'
-    }
+    },
 
   	// Call a function on the cards in the hand
   	cards: function(cb) {

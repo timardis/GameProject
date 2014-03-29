@@ -13,45 +13,45 @@ module.exports = {
     // Unique identifier for this card
     cardId: {
       type: 'INTEGER'
-    }
+    },
 
     // Suit of this card ('spade', 'club', 'diamond', 'heart')
   	suit: {
       type: 'STRING'
-    }
+    },
 
     // Value of the card (Starts at '1' for 3 of Spades, goes up to '52' for 2 of Hearts)
   	value: {
       type: 'INTEGER'
-    }
+    },
 
     // Id of the hand this card belongs to
     // Default: -1
   	handId: {
       type: 'INTEGER',
       defaultsTo: -1
-    }
+    },
 
     // Id of the combo this card belongs to
     // Default: -1
   	comboId: {
       type: 'INTEGER',
       defaultsTo: -1
-    }
+    },
 
     // Id of the combo this card belongs to
     // Default: 1
   	deckId: {
       type: 'INTEGER',
       defaultsTo: 1
-    }
+    },
 
     // Id of the stack this card belongs to
     // Default: 1
   	stackId: {
       type: 'INTEGER',
       defaultsTo: 1
-    }
+    },
 
     // Call a function on the hand this card belongs to
     handOwner: function(cb) {

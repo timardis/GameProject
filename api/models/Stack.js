@@ -15,14 +15,14 @@ module.exports = {
     stackId: {
       type: 'INTEGER',
       defaultsTo: 1
-    }
+    },
 
     // Id of the table this deck belongs to
     // Default: 1
   	tableId: {
       type: 'INTEGER',
       defaultsTo: 1
-    }
+    },
 
   	// Call a function on the combos in the stack
   	combos: function(cb) {

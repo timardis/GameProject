@@ -15,7 +15,7 @@ module.exports = {
   	tableId: {
       type: 'INTEGER',
       defaultsTo: 1
-    }
+    },
 
   	// Call a function on the deck for the table
   	deck: function(cb) {
@@ -36,7 +36,7 @@ module.exports = {
   		Player.findByTableId(this.tableId).done(function(err, players) {
   			cb(players);
   		});
-  	},
+  	}
     
   }
 

@@ -15,21 +15,21 @@ module.exports = {
     playerId: {
       type: 'STRING',
       defaultsTo: 'undefined'
-    }
+    },
 
     // Game handle for this player
     // Default: 'undefined'
     playerName: {
       type: 'STRING',
       defaultsTo: 'undefined'
-    }
+    },
 
     // Id of the table this deck belongs to
     // Default: 1
   	tableId: {
       type: 'INTEGER',
       defaultsTo: 1
-    }
+    },
 
   	// Call a function on the player's hand
   	hand: function(cb) {
