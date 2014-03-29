@@ -39,10 +39,19 @@ var MainController = {
     Player.create({
       playerName: req.param('name'),
       playerId: req.socket.handshake.sessionID
-    })
-
-    Player.findOneByPlayerId(req.socket.handshake.sessionID).done(function(err, player) {
-      console.log("Player found!")
+    }).done(function(err, player) {
+      Player.findByTableId(1).done(function(err, players) {
+        
+        // Here we will test to see how many players have joined
+        // If we have 4 players, we can start the game
+        // 
+        // if (players.length == 4) {
+        //    Table.find({ tableId: 1 }).done(function(err, table) {
+        //        table.startGame(cb)
+        //    })
+        // }
+        
+      })
     })
 
     res.redirect('/main/index')

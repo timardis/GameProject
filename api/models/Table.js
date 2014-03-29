@@ -36,7 +36,19 @@ module.exports = {
   		Player.findByTableId(this.tableId).done(function(err, players) {
   			cb(players);
   		});
-  	}
+  	},
+
+
+
+    //
+    //
+    // GAME LOGIC AND HELPERS
+    // 
+    // 
+    
+    startGame: function(cb) {
+      Deck.Create();
+    }
     
   }
 
