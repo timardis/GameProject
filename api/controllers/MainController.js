@@ -17,13 +17,9 @@
 
 //  Remove players with disconnected sockets
 var refreshSockets = function() {
-  
   var clients = sails.io.sockets.clients()
-  for(var j = 0; j < clients.length; j++) {
-    console.log(clients[j].id)
-  }
   Player.findByTableId(1).done(function(err, players) {
-    console.log('[Refreshing sockets, there are currently ' + players.length + ' players]')
+    console.log('[Refreshing sockets]')
     for(var i = 0; i < players.length; i++) {
       var pID = players[i].playerId
       var connected = false
@@ -40,12 +36,12 @@ var refreshSockets = function() {
         Player.destroy({
           playerId: pID
         }).done(function() {
-          console.log('Removed player')
+          console.log('[Removed player at ' + pID + ']')
         })
       }
     }
-  
   })
+
   }
 
 var MainController = {
@@ -55,9 +51,7 @@ var MainController = {
   	//	Request sent over socket, a.k.a. from front-end javaScript
   	if(req.isSocket)
   	{
-      res.json({
-        message: 'test message'
-      })
+      
   	}
 
   	//	Request for view
@@ -69,7 +63,7 @@ var MainController = {
 
   newPlayer: function(req, res) {
     refreshSockets()
-    
+
     Player.create({
       playerName: req.param('name'),
       playerId: req.socket.id
@@ -100,15 +94,7 @@ var MainController = {
 
     //  Remove player on socket disconnection
     req.socket.on('disconnect', function() {
-      console.log('Player from ' + req.socket.id + ' disconnected')
-      Player.destroy({
-         playerId: req.socket.id
-      }).done(function(){
-        console.log('Removed player')
-        Player.findByTableId(1).done(function(err, players) {
-          console.log('Total number of players: ' + players.length)
-        })
-      })
+      refreshSockets()
     })
   },
 

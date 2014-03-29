@@ -18,6 +18,8 @@ function init() {
 
     initCards()
 
+    initSocketListeners()
+
     index = 0
     var interval = setInterval(displayCard, 40)
 
@@ -82,9 +84,9 @@ function displayCard(){
 }
 //	Initialize socket.io event listeners
 //
-function initEventListeners() {
-	socket.on('all players', function(data) {
-		console.log(data)
+function initSocketListeners() {
+	socket.on('start game', function(data) {
+		console.log('Enough players, start game')
 	})
 }
 
