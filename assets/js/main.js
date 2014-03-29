@@ -16,21 +16,13 @@ function init() {
 	stage.autoClear = false
 	stage.enableDOMEvents(true)
 
-	console.log({
-		'name': 'ojsodjo',
-		'id': 'djsodjosj'
-	})
-
     initCards()
-    sendPlayerInfo('Cuong Ngo')
+
+    index = 0
+    var interval = setInterval(displayCard, 40)
 
     getPlayers()
     //displayCardArray(handcards)
-
- 	cardsSpriteSheet.addEventListener('complete', function(){
-		index = 0
- 		var interval = setInterval(displayCard, 40)
- 	})
 }
 
 //	Send player information
@@ -86,7 +78,6 @@ function displayCard(){
 	}
 	else
 	{
-		cards[index].paused = true
 		cards[index].x = 100 + index * 15
 		cards[index].y = 100
 		stage.addChild(cards[index])

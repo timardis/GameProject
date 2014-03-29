@@ -3,11 +3,10 @@
 
 <h1> VC 2.0 </h1><h2>a modified version of the card game VC</h2>
 
-<!--<canvas id='gameCanvas' width='1024' height='576'>
-</canvas>boot
+<canvas id='gameCanvas' width='1024' height='576'>
+</canvas>
 
--->
-
+<div width="300" id="login-page">
 <!-- Text input-->
 <div class="control-group">
   <label class="control-label" for="textinput">Username</label>
@@ -24,6 +23,17 @@
     <button id="playButton" name="playButton" onclick="joinTable()" class="btn btn-primary">Play!</button>
   </div>
 </div>
+</div>
+<script>
+$("#gameCanvas").hide();
+$( "#playButton" ).click(function() {
+  $( "#login-page" ).hide( "slow", function() {
+  	$("#gameCanvas").show("slow", function() {
+  		init()
+  	});
+  });
+});
+</script>
 
 </div>
 </div>

@@ -45,9 +45,7 @@ var MainController = {
       console.log("Player found!")
     })
 
-    res.json({
-      message: req.param('name')
-    })
+    res.redirect('/main/index')
   },
 
 

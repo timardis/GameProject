@@ -43,10 +43,7 @@
 
   <body>
 
-    <!-- Include the view file for the current controller/route -->
-    <%- body %>
-
-
+   
     <!--
 
       Client-side Javascript
@@ -63,17 +60,24 @@
     <script type="text/javascript" src="/js/sails.io.js"></script>
     <!-- listen on socket.io for incoming messages -->
     <script type="text/javascript" src="/js/app.js"></script>
+     <!-- load jQuery library -->
+    <script type="text/javascript" src="/js/jquery-2.1.0.min.js"></script>
     <!-- load easel.js library -->
     <script type="text/javascript" src="/js/easel.js"></script>
     <!-- load front-end script file for rendering canvas -->
     <script type="text/javascript" src="/js/main.js"></script>
-    
-    <!-- Call init() function in front-end javaScript file main.js -->
-    <script> init() </script>
+   
 
     <!-- Your scripts here? -->
     <!-- Your scripts here? -->
     <!-- Your scripts here? -->
+
+
+
+    
+  <!-- Include the view file for the current controller/route -->
+    <%- body %>
+
 
 
     <!--
