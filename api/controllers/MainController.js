@@ -51,13 +51,11 @@ var MainController = {
         //    })
         // }
         
+        console.log('New Player ' + req.param('name') + ' found!');
+        console.log('Total number of players is ' + players.length + '!');
       })
     })
-
-    res.redirect('/main/index')
   },
-
-
 
   /**
    * Overrides for the settings in `config/controllers.js`
