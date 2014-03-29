@@ -42,10 +42,8 @@ var MainController = {
     })
 
     Player.findOneByPlayerId(req.socket.handshake.sessionID).done(function(err, player) {
-      console.log("Player found!")
+      console.log('New Player ' + req.param('name') + ' found!')
     })
-
-    res.redirect('/main/index')
   },
 
 
