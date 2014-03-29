@@ -12,7 +12,10 @@ module.exports = {
   	
   	// Unique identifier for this table
     // Default: 1
-  	tableId: 'integer',
+  	tableId: {
+      type: 'INTEGER',
+      defaultsTo: 1
+    }
 
   	// Call a function on the deck for the table
   	deck: function(cb) {

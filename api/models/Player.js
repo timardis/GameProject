@@ -12,13 +12,24 @@ module.exports = {
   	
   	// Unique identifier for this player
     // Default: -1
-    playerId: 'STRING',
+    playerId: {
+      type: 'STRING',
+      defaultsTo: 'undefined'
+    }
 
-    playerName: 'string',
+    // Game handle for this player
+    // Default: 'undefined'
+    playerName: {
+      type: 'STRING',
+      defaultsTo: 'undefined'
+    }
 
     // Id of the table this deck belongs to
     // Default: 1
-  	tableId: 'integer',
+  	tableId: {
+      type: 'INTEGER',
+      defaultsTo: 1
+    }
 
   	// Call a function on the player's hand
   	hand: function(cb) {

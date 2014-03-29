@@ -12,30 +12,48 @@ module.exports = {
   	
     // Id of the combo this card belongs to
     // Default: -1
-  	comboId: 'integer',
+  	comboId: {
+      type: 'INTEGER',
+      defaultsTo: -1
+    }
 
     // Type of this combo ('repeat', 'straight', 'chop')
     // Default: 'undefined'
-  	type: 'string',
+  	type: {
+      type: 'STRING',
+      defaultsTo: 'undefined'
+    }
 
     // Length of this combo:
     // For a straight or chop type, this will be the length of the run
     // For a repeat type, this will be the number of times the card appears (i.e. single -> '1', double -> '2'...)
     // Default: 0
-  	length: 'integer',
+  	length: {
+      type: 'INTEGER',
+      defaultsTo: 0
+    }
 
     // Value of the hand for comparison purposes
     // This will be the value of the highest card in the combo
     // Default: -1
-  	compareValue: 'integer',
+  	compareValue: {
+      type: 'INTEGER',
+      defaultsTo: -1
+    }
 
     // Id of the hand this card belongs to
     // Default: -1
-  	handId: 'integer',
+  	handId: {
+      type: 'INTEGER',
+      defaultsTo: -1
+    }
 
     // Id of the stack this card belongs to
-    // Default: -1
-  	stackId: 'integer',
+    // Default: 1
+  	stackId: {
+      type: 'INTEGER',
+      defaultsTo: 1
+    }
 
   	// Call a function on the hand this card belongs to
   	handOwner: function(cb) {
