@@ -51,7 +51,7 @@ var MainController = {
         //    })
         // }
         
-        console.log('New Player ' + req.param('name') + ' found!');
+        console.log('New player ' + player.playerName + ' found!');
         console.log('Total number of players is ' + players.length + '!');
       })
     })
