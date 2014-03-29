@@ -15,9 +15,41 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+//  Remove players with disconnected sockets
+var refreshSockets = function() {
+  
+  var clients = sails.io.sockets.clients()
+  for(var j = 0; j < clients.length; j++) {
+    console.log(clients[j].id)
+  }
+  Player.findByTableId(1).done(function(err, players) {
+    console.log('[Refreshing sockets, there are currently ' + players.length + ' players]')
+    for(var i = 0; i < players.length; i++) {
+      var pID = players[i].playerId
+      var connected = false
+      for(var j = 0; j < clients.length; j++) {
+        if(pID == clients[j].id)
+        {
+          connected = true
+          break
+        }
+      }
+      if(!connected)
+      {
+        console.log('[Socket ' + pID + ' not connected, getting destroyed]')
+        Player.destroy({
+          playerId: pID
+        }).done(function() {
+          console.log('Removed player')
+        })
+      }
+    }
+  
+  })
+  }
 
 var MainController = {
-    
+    socketArray: {},
   index: function(req, res){
 
   	//	Request sent over socket, a.k.a. from front-end javaScript
@@ -36,6 +68,8 @@ var MainController = {
   },
 
   newPlayer: function(req, res) {
+    refreshSockets()
+    
     Player.create({
       playerName: req.param('name'),
       playerId: req.socket.id
@@ -51,11 +85,20 @@ var MainController = {
         //    })
         // }
         
+        //  Emit to all players it's game time
+        if (players.length == 4) {
+          //  Deal cards to players
+
+
+          sails.io.sockets.emit('start game', players)
+        }
+
         console.log('New player ' + player.playerName + ' playerId: ' + player.playerId + ' found!');
         console.log('Total number of players is ' + players.length + '!');
       })
     })
 
+    //  Remove player on socket disconnection
     req.socket.on('disconnect', function() {
       console.log('Player from ' + req.socket.id + ' disconnected')
       Player.destroy({
@@ -68,6 +111,8 @@ var MainController = {
       })
     })
   },
+
+  
 
   /**
    * Overrides for the settings in `config/controllers.js`
