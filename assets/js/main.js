@@ -18,25 +18,21 @@ function init() {
 
     initCards()
 
+    initSocketListeners()
+
     index = 0
     var interval = setInterval(displayCard, 40)
 
-    getPlayers()
-    //displayCardArray(handcards)
+
+  	joinTable()
 }
 
 //	Send player information
 //	
-function sendPlayerInfo(playerName) {
-	var playerInfo = {
-		name: 'Cuong Ngo'
-	}
-	socket.get('/', {
-		'flag': 'player info',
-		'name': 'Cuong Ngo'
-	}, function(data) {
-		console.log(data)
-	})
+function joinTable() {
+	socket.get('/main/newPlayer', { name: document.getElementById('nameinput').value }, function (response) {
+		console.log(response);
+	});
 }
 
 //	Get players from the server
@@ -88,9 +84,9 @@ function displayCard(){
 }
 //	Initialize socket.io event listeners
 //
-function initEventListeners() {
-	socket.on('all players', function(data) {
-		console.log(data)
+function initSocketListeners() {
+	socket.on('start game', function(data) {
+		console.log('Enough players, start game')
 	})
 }
 

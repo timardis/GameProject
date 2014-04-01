@@ -78,29 +78,5 @@ module.exports = {
         })
       }
     }
-
-    /*deal: function(cb) {
-      for (var i = 52; i >= 1; i--) {
-        var pos = Math.floor(Math.random() * i);
-        Player.findOne( (i % 4) + 1).done(function(err, player) {
-          Hand.findOneByPlayerId(player.id).done(function(err, hand) {
-            var handId = hand.id;
-            Card.findOne(pos).done(function(err, card) {
-              card.deckId = -1;
-              card.handId = handId;
-              card.save(function(err) {
-                console.log('Card ' + cards[pos].id + ' dealt to player ' + players[i % 4].id + '!');
-
-                if (i == 1) {
-                  cb();
-                }
-              })
-              console.log('Position in deck is ' + pos);
-              if (i == 1) { cb(); }
-            })
-          })
-        })
-      }
-    }*/
   }
 };

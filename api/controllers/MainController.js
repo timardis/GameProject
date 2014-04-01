@@ -15,17 +15,43 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+//  Remove players with disconnected sockets
+var refreshSockets = function() {
+  var clients = sails.io.sockets.clients()
+  Player.findByTableId(1).done(function(err, players) {
+    console.log('[Refreshing sockets]')
+    for(var i = 0; i < players.length; i++) {
+      var pID = players[i].sessionId
+      var connected = false
+      for(var j = 0; j < clients.length; j++) {
+        if(pID == clients[j].id)
+        {
+          connected = true
+          break
+        }
+      }
+      if(!connected)
+      {
+        console.log('[Socket ' + pID + ' not connected, getting destroyed]')
+        Player.destroy({
+          sessionId: pID
+        }).done(function() {
+          console.log('[Removed player at ' + pID + ']')
+        })
+      }
+    }
+  })
+
+  }
 
 var MainController = {
-    
+    socketArray: {},
   index: function(req, res){
 
   	//	Request sent over socket, a.k.a. from front-end javaScript
   	if(req.isSocket)
   	{
-      res.json({
-        message: 'test message'
-      })
+      
   	}
 
   	//	Request for view
@@ -36,6 +62,8 @@ var MainController = {
   },
 
   newPlayer: function(req, res) {
+    refreshSockets();
+
     Player.create({
       playerName: req.param('name'),
       sessionId: req.socket.id
@@ -54,6 +82,7 @@ var MainController = {
              Table.create().done(function(err, table) {
                  table.newGame(function() {
                     console.log('Table created, deck loaded, cards dealt!');
+                    sails.io.sockets.emit('start game', players);
                  })
              })
           }
@@ -61,15 +90,13 @@ var MainController = {
       })
     })
 
+    //  Remove player on socket disconnection
     req.socket.on('disconnect', function() {
-      console.log('Player from ' + req.socket.id + ' disconnected')
-      Player.destroy({
-         sessionId: req.socket.id
-      }).done(function(){
-        console.log('Removed player')
-      })
+      refreshSockets()
     })
   },
+
+  
 
   /**
    * Overrides for the settings in `config/controllers.js`
