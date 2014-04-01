@@ -10,12 +10,6 @@ module.exports = {
 
   attributes: {
   	
-  	// Unique identifier for this card
-    // Default: 1
-  	deckId: {
-      type: 'INTEGER',
-      defaultsTo: 1
-    },
 
   	// Id of the table this deck belongs to
     // Default: 1
@@ -26,18 +20,87 @@ module.exports = {
 
   	// Call a function on the cards in the deck
   	cards: function(cb) {
-  		Card.findByDeckId(this.deckId).done(function(err, cards) {
+  		Card.findByDeckId(this.id).done(function(err, cards) {
   			cb(cards);
   		});
   	},
 
   	// Call a function on the table this deck belongs to
   	tableOwner: function(cb) {
-  		Table.findOneByTableId(this.tableId).done(function(err, table) {
+  		Table.findOne(this.tableId).done(function(err, table) {
   			cb(table);
   		});
-  	}
-    
-  }
+  	},
 
+    init: function(cb) {
+      Deck.findOne(1).done(function(err, deck) {
+        deck.load(function() {
+          deck.deal(function() {
+            cb();
+          })
+        })
+      })
+    },
+    
+    // Fill the deck with all of the cards
+    load: function(cb) {
+      for (var i = 0; i < 52; i++) {
+        Card.create({
+          cardId: i,
+          suit: i % 4
+        }).done(function(err, card) {
+          console.log('Card ' + card.cardId + ' loaded into deck!');
+
+          if (i == 51) { 
+            console.log('Deck loaded, calling back!');
+            cb();
+          }
+        });
+      }
+    },
+
+    deal: function(cb) {
+      for (var i = 52; i >= 1; i--) {
+        Player.findOne((i%4) + 1).done(function(err, player) {
+          player.hand(function(hand) {
+            Card.findByDeckId(1).done(function(err, cards) {
+              var pos = Math.floor(Math.random() * i);
+              cards[pos].deckId = -1;
+              cards[pos].handId = hand.id;
+              cards[pos].save(function(err) {
+                console.log('Card ' + cards[pos].id + ' given to player ' + player.id + '!');
+                if (i == 1) {
+                  cb();
+                }
+              })
+            })
+          })
+        })
+      }
+    }
+
+    /*deal: function(cb) {
+      for (var i = 52; i >= 1; i--) {
+        var pos = Math.floor(Math.random() * i);
+        Player.findOne( (i % 4) + 1).done(function(err, player) {
+          Hand.findOneByPlayerId(player.id).done(function(err, hand) {
+            var handId = hand.id;
+            Card.findOne(pos).done(function(err, card) {
+              card.deckId = -1;
+              card.handId = handId;
+              card.save(function(err) {
+                console.log('Card ' + cards[pos].id + ' dealt to player ' + players[i % 4].id + '!');
+
+                if (i == 1) {
+                  cb();
+                }
+              })
+              console.log('Position in deck is ' + pos);
+              if (i == 1) { cb(); }
+            })
+          })
+        })
+      }
+    }*/
+  }
 };

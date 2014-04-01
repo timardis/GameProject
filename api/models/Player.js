@@ -12,7 +12,7 @@ module.exports = {
   	
   	// Unique identifier for this player
     // Default: -1
-    playerId: {
+    sessionId: {
       type: 'STRING',
       defaultsTo: 'undefined'
     },
@@ -33,14 +33,14 @@ module.exports = {
 
   	// Call a function on the player's hand
   	hand: function(cb) {
-  		Hand.findOneByPlayerId(this.playerId).done(function(err, hand) {
+  		Hand.findOneByPlayerId(this.id).done(function(err, hand) {
   			cb(hand);
   		});
   	},
 
   	// Call a function on the table this deck belongs to
   	tableOwner: function(cb) {
-  		Table.findOneByTableId(this.tableId).done(function(err, table) {
+  		Table.findOne(this.tableId).done(function(err, table) {
   			cb(table);
   		});
   	}

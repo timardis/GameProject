@@ -38,28 +38,33 @@ var MainController = {
   newPlayer: function(req, res) {
     Player.create({
       playerName: req.param('name'),
-      playerId: req.socket.id
+      sessionId: req.socket.id
     }).done(function(err, player) {
-      Player.findByTableId(1).done(function(err, players) {
-        
-        // Here we will test to see how many players have joined
-        // If we have 4 players, we can start the game
-        // 
-        // if (players.length == 4) {
-        //    Table.find({ tableId: 1 }).done(function(err, table) {
-        //        table.startGame(cb)
-        //    })
-        // }
-        
-        console.log('New player ' + player.playerName + ' playerId: ' + player.playerId + ' found!');
-        console.log('Total number of players is ' + players.length + '!');
+      Hand.create({
+        playerId: player.id
+      }).done(function(err, hand) {
+        Player.findByTableId(1).done(function(err, players) {
+
+          console.log('New player ' + player.playerName + ' playerId: ' + player.id + ' found!');
+          console.log('Total number of players is ' + players.length + '!');
+          
+          // Here we will test to see how many players have joined
+          // If we have 4 players, we can start the game
+          if (players.length == 4) {
+             Table.create().done(function(err, table) {
+                 table.newGame(function() {
+                    console.log('Table created, deck loaded, cards dealt!');
+                 })
+             })
+          }
+        })
       })
     })
 
     req.socket.on('disconnect', function() {
       console.log('Player from ' + req.socket.id + ' disconnected')
       Player.destroy({
-         playerId: req.socket.id
+         sessionId: req.socket.id
       }).done(function(){
         console.log('Removed player')
       })

@@ -10,13 +10,6 @@ module.exports = {
 
   attributes: {
   	
-    // Id of the combo this card belongs to
-    // Default: -1
-  	comboId: {
-      type: 'INTEGER',
-      defaultsTo: -1
-    },
-
     // Type of this combo ('repeat', 'straight', 'chop')
     // Default: 'undefined'
   	type: {
@@ -55,16 +48,23 @@ module.exports = {
       defaultsTo: 1
     },
 
+    // Call a function on the cards in this combo
+    cards: function(cb) {
+      Card.findByComboId(this.id).done(function(err, cards) {
+        cb(cards);
+      });
+    },
+
   	// Call a function on the hand this card belongs to
   	handOwner: function(cb) {
-  		Hand.findOneByHandId(this.handId).done(function(err, hand) {
+  		Hand.findOne(this.handId).done(function(err, hand) {
   			cb(hand);
   		});
   	},
 
   	// Call a function on the stack this card belongs to
     stackOwner: function(cb) {
-    	Stack.findOneByStackId(this.stackId).done(function(err, stack) {
+    	Stack.findOne(this.stackId).done(function(err, stack) {
   			cb(stack);
   		});
     }
