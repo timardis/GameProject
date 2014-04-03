@@ -17,6 +17,10 @@ module.exports = {
       defaultsTo: -1
     },
 
+    cardArray: {
+      type: 'ARRAY'
+    },
+
   	// Call a function on the cards in the hand
   	cards: function(cb) {
       Card.findByHandId(this.id).done(function(err, cards) {

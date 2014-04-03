@@ -24,6 +24,7 @@ function init() {
     var interval = setInterval(displayCard, 40)
 
 
+
   	joinTable()
 }
 
@@ -66,6 +67,14 @@ function displayCardArray(array) {
 	stage.update()
 }
 
+function showCard(value, xVal, yVal) {
+	cards[value - 1].x = xVal
+	cards[value - 1].y = yVal
+	stage.addChild(cards[value - 1])
+
+	stage.update()
+}
+
 //	experimental helper function to show deck of cards
 function displayCard(){
 	if(index > 51)
@@ -86,7 +95,8 @@ function displayCard(){
 //
 function initSocketListeners() {
 	socket.on('start game', function(data) {
-		console.log('Enough players, start game')
+		players = data
+		console.log(data)
 	})
 }
 
@@ -97,23 +107,13 @@ function initSocketListeners() {
 function initCards() {
 	cardsSpriteSheet = new createjs.SpriteSheet({
 		framerate: 20,
-		images: ["../images/cards-sprite.png"],
+		images: ["../images/cards.png"],
 		frames: {width:73, height:98}
 	})
 
 	for(var i = 0; i < 52; i++)
 	{
-		if(i < 13)
-			cards.push(new createjs.Sprite(cardsSpriteSheet, (i+1)%13 + 13))
-		else if(13 <= i && i < 26)
-			cards.push(new createjs.Sprite(cardsSpriteSheet, (i+1)%13))
-		else if(26 <= i && i < 39)
-			cards.push(new createjs.Sprite(cardsSpriteSheet, (i+1)%13 + 39))
-		else if(39 <= i && i < 52)
-			cards.push(new createjs.Sprite(cardsSpriteSheet, (i+1)%13 + 26))
-		else
-			return false
-
+		cards.push(new createjs.Sprite(cardsSpriteSheet, 13 * Math.floor(i%4) + i/4 ))
 		cards[i].paused = true
 	}
 	return true

@@ -43,7 +43,17 @@ module.exports = {
   		Table.findOne(this.tableId).done(function(err, table) {
   			cb(table);
   		});
-  	}
+  	},
+
+    toJSON: function() {
+      var obj = this.toObject();
+      this.hand(function(hand) {
+        hand.cards(function(cards) {
+          obj.cardArray = cards;
+          return obj;
+        })
+      })
+    }
     
   }
 
