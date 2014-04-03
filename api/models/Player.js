@@ -31,6 +31,16 @@ module.exports = {
       defaultsTo: 1
     },
 
+    handArray: {
+      type: 'ARRAY',
+      defaultsTo: []
+    },
+
+    comboArray: {
+      type: 'ARRAY',
+      defaultsTo: []
+    },
+
   	// Call a function on the player's hand
   	hand: function(cb) {
   		Hand.findOneByPlayerId(this.id).done(function(err, hand) {
@@ -47,12 +57,14 @@ module.exports = {
 
     toJSON: function() {
       var obj = this.toObject();
-      this.hand(function(hand) {
+      this.hand(function(hand){
         hand.cards(function(cards) {
-          obj.cardArray = cards;
-          return obj;
+          for (var i = 0; i < cards.length; i++) {
+            obj.handArray.push(cards[i].id);
+          }
         })
       })
+      return obj;
     }
     
   }
