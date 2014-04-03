@@ -46,10 +46,9 @@ module.exports = {
     load: function(cb) {
       for (var i = 0; i < 52; i++) {
         Card.create({
-          cardId: i,
           suit: i % 4
         }).done(function(err, card) {
-          console.log('Card ' + card.cardId + ' loaded into deck!');
+          console.log('Card ' + card.id + ' loaded into deck!');
 
           if (i == 51) { 
             console.log('Deck loaded, calling back!');
