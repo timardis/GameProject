@@ -31,11 +31,6 @@ module.exports = {
       defaultsTo: 1
     },
 
-    handArray: {
-      type: 'ARRAY',
-      defaultsTo: []
-    },
-
     comboArray: {
       type: 'ARRAY',
       defaultsTo: []
@@ -59,6 +54,7 @@ module.exports = {
       var obj = this.toObject();
       this.hand(function(hand){
         hand.cards(function(cards) {
+          obj.handArray = [];
           for (var i = 0; i < cards.length; i++) {
             obj.handArray.push(cards[i].id);
           }
