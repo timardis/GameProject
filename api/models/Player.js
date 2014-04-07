@@ -31,11 +31,6 @@ module.exports = {
       defaultsTo: 1
     },
 
-    comboArray: {
-      type: 'ARRAY',
-      defaultsTo: []
-    },
-
   	// Call a function on the player's hand
   	hand: function(cb) {
   		Hand.findOneByPlayerId(this.id).done(function(err, hand) {
