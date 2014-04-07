@@ -86,8 +86,9 @@ function displayCard(){
 //
 function initSocketListeners() {
 	socket.on('update', function(data) {
-		socket.get('main/update', {}, function(response) {
+		socket.get('/main/update', {}, function(response) {
 			data = response;
+			console.log(response)
 		})
 	})
 }
