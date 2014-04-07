@@ -36,15 +36,6 @@ function joinTable() {
 	});
 }
 
-//	Get players from the server
-//	
-function getPlayers() {
-	socket.on('start game', function(data) {
-		//	should get a 'players' array
-		players = data.players
-	})
-}
-
 //	helper function for printing out text for debug purposes
 function printDebugText(str) {
 	var t = new createjs.Text(str, '14px Tacoma', 'black')
@@ -94,9 +85,10 @@ function displayCard(){
 //	Initialize socket.io event listeners
 //
 function initSocketListeners() {
-	socket.on('start game', function(data) {
-		players = data
-		console.log(data)
+	socket.on('update', function(data) {
+		socket.get('main/update', {}, function(response) {
+
+		})
 	})
 }
 
