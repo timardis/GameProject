@@ -52,14 +52,13 @@ module.exports = {
 
     toJSON: function() {
       var obj = this.toObject();
-      this.hand(function(hand){
+
+      this.hand(function(hand) {
         hand.cards(function(cards) {
-          obj.handArray = [];
-          for (var i = 0; i < cards.length; i++) {
-            obj.handArray.push(cards[i].id);
-          }
+          obj.handSize = cards.length;
         })
       })
+
       return obj;
     }
     

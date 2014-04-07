@@ -17,6 +17,13 @@ module.exports = {
       defaultsTo: 1
     },
 
+    // Id of the top combo on the stack
+    // Default: -1
+    topComboId: {
+      type: 'INTEGER',
+      defaultsTo: -1
+    },
+
   	// Call a function on the combos in the stack
   	combos: function(cb) {
   		Combo.findByStackId(this.id).done(function(err, combos) {
@@ -29,8 +36,12 @@ module.exports = {
   		Table.findOne(this.tableId).done(function(err, table) {
   			cb(table);
   		});
-  	}
-    
+  	},
+
+    toJson: function() {
+      var obj = this.toObject();
+    }
+
   }
 
 };

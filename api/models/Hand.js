@@ -36,7 +36,28 @@ module.exports = {
   		Player.findOne(this.playerId).done(function(err, player) {
   			cb(player);
   		});
-  	}
+  	},
+
+    toJSON: function() {
+      var obj = this.toObject();
+
+      obj.handArray = [];
+      obj.comboArray = [];
+
+      this.cards(function(cards) {
+        for (var i = 0; i < cards.length; i++) {
+          obj.handArray.push(cards[i].id);
+        }
+      })
+
+      this.combo(function(combo) {
+        combo.cards(function(cards) {
+          for (var i = 0; i < cards.length; i++) {
+            obj.comboArray.push(cards[i].id);
+          }
+        })
+      })
+    }
     
   }
 

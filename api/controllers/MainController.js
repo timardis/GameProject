@@ -82,7 +82,7 @@ var MainController = {
              Table.create().done(function(err, table) {
                  table.newGame(function() {
                     console.log('Table created, deck loaded, cards dealt!');
-                    sails.io.sockets.emit('start game', players);
+                    sails.io.sockets.emit('start game', table);
                  })
              })
           }
