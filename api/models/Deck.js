@@ -59,23 +59,25 @@ module.exports = {
     },
 
     deal: function(cb) {
-      for (var i = 52; i >= 1; i--) {
-        Player.findOne((i%4) + 1).done(function(err, player) {
-          player.hand(function(hand) {
-            Card.findByDeckId(1).done(function(err, cards) {
-              var pos = Math.floor(Math.random() * i);
-              cards[pos].deckId = -1;
-              cards[pos].handId = hand.id;
-              cards[pos].save(function(err) {
-                console.log('Card ' + cards[pos].id + ' given to player ' + player.id + '!');
-                if (i == 1) {
-                  cb();
-                }
+      this.tableOwner(function(table) {
+        table.players(function(players) {
+          for (var i = 52; i >= 1; i--) {
+            players[i%4].hand(function(hand) {
+              Card.findByDeckId(1).done(function(err, cards) {
+                var pos = Math.floor(Math.random() * i);
+                cards[pos].deckId = -1;
+                cards[pos].handId = hand.id;
+                cards[pos].save(function(err) {
+                  console.log('Card ' + cards[pos].id + ' given to player ' + players[i%4].id + '!');
+                  if (i == 1) {
+                    cb();
+                  }
+                })
               })
             })
-          })
+          }
         })
-      }
+      })
     }
   }
 };
