@@ -6,6 +6,8 @@
  * @docs		:: http://sailsjs.org/#!documentation/models
  */
 
+var loaded = false
+
 module.exports = {
 
   attributes: {
@@ -44,17 +46,20 @@ module.exports = {
     
     // Fill the deck with all of the cards
     load: function(cb) {
-      for (var i = 0; i < 52; i++) {
-        Card.create({
-          suit: i % 4
-        }).done(function(err, card) {
-          console.log('Card ' + card.id + ' loaded into deck!');
+      if(!loaded) {
+        for (var i = 0; i < 52; i++) {
+          Card.create({
+            suit: i % 4
+          }).done(function(err, card) {
+            console.log('Card ' + card.id + ' loaded into deck!');
 
-          if (i == 51) { 
-            console.log('Deck loaded, calling back!');
-            cb();
-          }
-        });
+            if (i == 51) { 
+              console.log('Deck loaded, calling back!');
+              cb();
+            }
+          });
+        }
+        loaded = true
       }
     },
 

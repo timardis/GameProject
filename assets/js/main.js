@@ -20,10 +20,7 @@ function init() {
 
     initSocketListeners()
 
-    index = 0
-    var interval = setInterval(displayCard, 40)
-
-
+	stage.update()
 
   	joinTable()
 }
@@ -45,19 +42,6 @@ function printDebugText(str) {
 	stage.update()
 }
 
-//	experimental helper function
-function displayCardArray(array) {
-	for(var i = 0; i < array.length; i++){
-		var cardIndex = array[i]
-		
-		cards[cardIndex].x = 400 + i * 15
-		cards[cardIndex].y = 300
-		stage.addChild(cards[cardIndex])
-	}
-
-	stage.update()
-}
-
 function showCard(value, xVal, yVal) {
 	cards[value - 1].x = xVal
 	cards[value - 1].y = yVal
@@ -68,17 +52,12 @@ function showCard(value, xVal, yVal) {
 
 //	experimental helper function to show deck of cards
 function displayCard(){
-	if(index > 51)
-	{
-		clearInterval(interval)
-	}
-	else
+	if(index < 52)
 	{
 		cards[index].x = 100 + index * 15
 		cards[index].y = 100
 		stage.addChild(cards[index])
 
-		stage.update()
 		index++
 	}
 }
@@ -87,8 +66,10 @@ function displayCard(){
 function initSocketListeners() {
 	socket.on('update', function(data) {
 		socket.get('/main/update', {}, function(response) {
-			data = response;
-			console.log(response)
+			var mainHandArray = response.handArray
+			for(var i = 0; i < mainHandArray.length; i++) {
+				showCard(mainHandArray[i], 300 + 15*i, 400)
+			}
 		})
 	})
 }

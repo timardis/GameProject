@@ -97,11 +97,8 @@ var MainController = {
   },
 
   update: function(req, res) {
-      console.log('About to find player')
     Player.findOneBySessionId(req.socket.id).done(function(err, player) {
-      console.log('Found player')
       player.hand(function(hand) {
-        console.log('Sending hand to socket ' + res.socket.id)
         res.json(hand);
       });
     });
