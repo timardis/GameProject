@@ -82,7 +82,7 @@ var MainController = {
              Table.create().done(function(err, table) {
                  table.newGame(function() {
                     console.log('Table created, deck loaded, cards dealt!');
-                    sails.io.sockets.emit('start game', players[0]);
+                    sails.io.sockets.emit('update');
                  })
              })
           }
@@ -94,6 +94,14 @@ var MainController = {
     req.socket.on('disconnect', function() {
       refreshSockets()
     })
+  },
+
+  update: function(req, res) {
+    Player.findBySessionId(req.socket.id).done(function(err, player) {
+      player.hand(function(hand) {
+        res.json(hand);
+      });
+    });
   },
 
   

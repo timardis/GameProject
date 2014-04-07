@@ -8,7 +8,7 @@ var canvas, stage, title,
 	players = [],
 	cardsSpriteSheet,
 	cards = []
-var index, interval
+var index, interval, data
 
 function init() {
 	canvas = document.getElementById('gameCanvas')
@@ -87,7 +87,7 @@ function displayCard(){
 function initSocketListeners() {
 	socket.on('update', function(data) {
 		socket.get('main/update', {}, function(response) {
-
+			data = response;
 		})
 	})
 }
