@@ -47,8 +47,8 @@ module.exports = {
       Deck.create().done(function(err, deck) {
         deck.init(function() {
           cb();
-        })
-      })
+        });
+      });
     },
 
     changeTurn: function(cb) {
@@ -59,18 +59,25 @@ module.exports = {
           card.handOwner(function(hand) {
             hand.playerOwner(function(player) {
               turnId = player.id;
-            })
-          })
-        })
+            });
+          });
+        });
       }
 
       else {
-
+        Player.findByTableId(this.id).done(function(err, players) {
+          if (turnId == players[players.length - 1].id) {
+            turnId = players[0].id;
+          }
+          else {
+            turnId++;
+          }
+        });
       }
 
       this.turnId = turnId;
       this.save(function(err) {
-        console.log('Turn')
+        console.log('Your move, player ' + turnId + '!');
       });
     }
     
