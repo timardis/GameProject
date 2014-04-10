@@ -10,6 +10,12 @@ module.exports = {
 
   attributes: {
 
+    // Id of the player whose turn it is
+    turnId: {
+      type: 'INTEGER',
+      defaultsTo: -1
+    },
+
   	// Call a function on the deck for the table
   	deck: function(cb) {
   		Deck.findOneByTableId(this.id).done(function(err, deck) {
@@ -43,6 +49,29 @@ module.exports = {
           cb();
         })
       })
+    },
+
+    changeTurn: function(cb) {
+      var turnId = this.turnId;
+
+      if (turnId == -1) {
+        Card.findOne(1).done(function(err, card) {
+          card.handOwner(function(hand) {
+            hand.playerOwner(function(player) {
+              turnId = player.id;
+            })
+          })
+        })
+      }
+
+      else {
+
+      }
+
+      this.turnId = turnId;
+      this.save(function(err) {
+        console.log('Turn')
+      });
     }
     
   }

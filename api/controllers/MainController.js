@@ -82,6 +82,9 @@ var MainController = {
              Table.create().done(function(err, table) {
                  table.newGame(function() {
                     console.log('Table created, deck loaded, cards dealt!');
+                    table.changeTurn(function() {
+
+                    });
                     sails.io.sockets.emit('update');
                  })
              })
@@ -104,7 +107,9 @@ var MainController = {
     });
   },
 
-  
+  playCombo: function(req, res) {
+
+  },
 
   /**
    * Overrides for the settings in `config/controllers.js`
