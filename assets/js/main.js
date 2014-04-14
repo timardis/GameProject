@@ -9,7 +9,7 @@ var canvas, stage, title,
 	cardsSpriteSheet,
 	cards = []
 var index, interval, data
-var clickedCards = []
+var comboCards = []
 
 function init() {
 	canvas = document.getElementById('gameCanvas')
@@ -81,7 +81,7 @@ function initSocketListeners() {
 // 
 function initCards() {
 	for(var i = 0; i < 51; i++) {
-		clickedCards[i] = false;
+		comboCards[i] = false;
 	}
 
 	cardsSpriteSheet = new createjs.SpriteSheet({
@@ -94,21 +94,23 @@ function initCards() {
 	{
 		cards.push(new createjs.Sprite(cardsSpriteSheet, 13 * Math.floor(i%4) + i/4 ))
 		cards[i].paused = true
-		cards[i].addEventListener('click', function() {
-			if(clickedCards[i] == false) {
-				cards[i] = true
-				console.log("Card #" + (i+1) + " added")
-				socket.get('/main/addCombo', {cardId: i + 1})
+		cards[i].id = i
+		cards[i].addEventListener('click', function(event) {
+			var eventCardId = event.target.id
+			if(comboCards[eventCardId] == false) {
+				comboCards[eventCardId] = true
+				console.log("Card #" + (eventCardId+1) + " added")
+				socket.get('/main/addCombo', {cardId: eventCardId + 1})
 
-				cards[i].y += 25
+				cards[eventCardId].y -= 25
 				stage.update()
 			}
 			else {
-				cards[i] = false
-				console.log("Card #" + (i+1) + " removed")
-				socket.get('/main/removeCombo', {cardId: i + 1})
+				comboCards[eventCardId] = false
+				console.log("Card #" + (eventCardId+1) + " removed")
+				socket.get('/main/removeCombo', {cardId: eventCardId + 1})
 
-				cards[i].y -= 25
+				cards[eventCardId].y += 25
 				stage.update()	
 			}
 			
