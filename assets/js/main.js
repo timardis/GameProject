@@ -9,6 +9,7 @@ var canvas, stage, title,
 	cardsSpriteSheet,
 	cards = []
 var index, interval, data
+var clickedCards = []
 
 function init() {
 	canvas = document.getElementById('gameCanvas')
@@ -79,6 +80,10 @@ function initSocketListeners() {
 //	are arranged on the sprite image
 // 
 function initCards() {
+	for(var i = 0; i < 51; i++) {
+		clickedCards[i] = false;
+	}
+
 	cardsSpriteSheet = new createjs.SpriteSheet({
 		framerate: 20,
 		images: ["../images/cards.png"],
@@ -89,6 +94,25 @@ function initCards() {
 	{
 		cards.push(new createjs.Sprite(cardsSpriteSheet, 13 * Math.floor(i%4) + i/4 ))
 		cards[i].paused = true
+		cards[i].addEventListener('click', function() {
+			if(clickedCards[i] == false) {
+				cards[i] = true
+				console.log("Card #" + (i+1) + " added")
+				socket.get('/main/addCombo', {cardId: i + 1})
+
+				cards[i].y += 25
+				stage.update()
+			}
+			else {
+				cards[i] = false
+				console.log("Card #" + (i+1) + " removed")
+				socket.get('/main/removeCombo', {cardId: i + 1})
+
+				cards[i].y -= 25
+				stage.update()	
+			}
+			
+		})
 	}
 	return true
 }
