@@ -89,7 +89,7 @@ module.exports = {
         card.comboId = -1;
 
         card.save(function(err) {
-          connsole.log('Card ' + cardId + ' removed from combo!');
+          console.log('Card ' + cardId + ' removed from combo!');
           cb();
         });
       });

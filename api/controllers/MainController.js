@@ -71,22 +71,26 @@ var MainController = {
       Hand.create({
         playerId: player.id
       }).done(function(err, hand) {
-        Player.findByTableId(1).done(function(err, players) {
+        Combo.create({
+          handId: hand.id
+        }).done(function(err, combo) {
+          Player.findByTableId(1).done(function(err, players) {
 
-          console.log('New player ' + player.playerName + ' playerId: ' + player.id + ' found!');
-          console.log('Total number of players is ' + players.length + '!');
-          
-          // Here we will test to see how many players have joined
-          // If we have 4 players, we can start the game
-          if (players.length == 4) {
-             Table.create().done(function(err, table) {
-                 table.newGame(function() {
-                    console.log('Table created, deck loaded, cards dealt!');
-                    table.changeTurn(function() {});
-                    sails.io.sockets.emit('update');
-                 });
-             });
-          }
+            console.log('New player ' + player.playerName + ' playerId: ' + player.id + ' found!');
+            console.log('Total number of players is ' + players.length + '!');
+            
+            // Here we will test to see how many players have joined
+            // If we have 4 players, we can start the game
+            if (players.length == 4) {
+               Table.create().done(function(err, table) {
+                   table.newGame(function() {
+                      console.log('Table created, deck loaded, cards dealt!');
+                      table.changeTurn(function() {});
+                      sails.io.sockets.emit('update');
+                   });
+               });
+            }
+          });
         });
       });
     });
@@ -108,12 +112,28 @@ var MainController = {
 
   // Add a card to the player's combo
   addCombo: function(req, res) {
+    Player.findOneBySessionId(req.socket.id).done(function(err, player) {
+      player.hand(function(hand) {
+        hand.combo(function(combo) {
+          combo.add(req.param('cardId'), function() {
 
+          });
+        });
+      });
+    });
   },
 
   // Remove a card from the player's combo
   removeCombo: function(req, res) {
+    Player.findOneBySessionId(req.socket.id).done(function(err, player) {
+      player.hand(function(hand) {
+        hand.combo(function(combo) {
+          combo.remove(req.param('cardId'), function() {
 
+          });
+        });
+      });
+    });
   },
 
   // Play a combo from a player's hand
