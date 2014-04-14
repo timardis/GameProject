@@ -45,7 +45,7 @@ module.exports = {
     // Default: 1
   	stackId: {
       type: 'INTEGER',
-      defaultsTo: 1
+      defaultsTo: -1
     },
 
     // Call a function on the cards in this combo
@@ -67,6 +67,65 @@ module.exports = {
     	Stack.findOne(this.stackId).done(function(err, stack) {
   			cb(stack);
   		});
+    },
+
+    // Add a card to this combo
+    add: function(cardId, cb) {
+      var comboId = this.id;
+
+      Card.findOne(cardId).done(function(err, card) {
+        card.comboId = comboId;
+
+        card.save(function(err) {
+          console.log('Card ' + cardId + ' added to combo ' + comboId + '!');
+          cb();
+        });
+      });
+    },
+
+    // Remove a card from this combo
+    remove: function(cardId, cb) {
+      Card.findOne(cardId).done(function(err, card) {
+        card.comboId = -1;
+
+        card.save(function(err) {
+          connsole.log('Card ' + cardId + ' removed from combo!');
+          cb();
+        });
+      });
+    },
+
+    // Play this combo, updating each card in the hand
+    play: function(cb) {
+
+      // Update card properties
+      this.cards(function(cards) {
+        for (var i = 0; i < cards.length; i++) {
+          cards[i].stackId = 1;
+          cards[i].handId = -1;
+        }
+      });
+
+      // Update combo properties
+      this.stackId = 1;
+      this.handId = -1;
+
+      // Update stack properties
+      var topId = this.id;
+      this.stackOwner(function(stack) {
+        stack.topComboId = topId;
+        stack.save(function(err) {
+          console.log('Stack updated!');
+        });
+      });
+
+      // Save this combo
+      this.save(function(err) {
+        console.log('Combo played!');
+      });
+
+      // Callback
+      cb();
     }
     
   }

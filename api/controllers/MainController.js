@@ -82,23 +82,22 @@ var MainController = {
              Table.create().done(function(err, table) {
                  table.newGame(function() {
                     console.log('Table created, deck loaded, cards dealt!');
-                    table.changeTurn(function() {
-
-                    });
+                    table.changeTurn(function() {});
                     sails.io.sockets.emit('update');
-                 })
-             })
+                 });
+             });
           }
-        })
-      })
-    })
+        });
+      });
+    });
 
     //  Remove player on socket disconnection
     req.socket.on('disconnect', function() {
-      refreshSockets()
-    })
+      refreshSockets();
+    });
   },
 
+  // Update the table (Stack, player hand size)
   update: function(req, res) {
     Player.findOneBySessionId(req.socket.id).done(function(err, player) {
       player.hand(function(hand) {
@@ -107,7 +106,23 @@ var MainController = {
     });
   },
 
-  playCombo: function(req, res) {
+  // Add a card to the player's combo
+  addCombo: function(req, res) {
+
+  },
+
+  // Remove a card from the player's combo
+  removeCombo: function(req, res) {
+
+  },
+
+  // Play a combo from a player's hand
+  play: function(req, res) {
+
+  },
+
+  // Pass over a player's turn
+  pass: function(req, res) {
 
   },
 

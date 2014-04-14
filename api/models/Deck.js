@@ -39,9 +39,9 @@ module.exports = {
         deck.load(function() {
           deck.deal(function() {
             cb();
-          })
-        })
-      })
+          });
+        });
+      });
     },
     
     // Fill the deck with all of the cards
@@ -77,12 +77,12 @@ module.exports = {
                   if (i == 1) {
                     cb();
                   }
-                })
-              })
-            })
+                });
+              });
+            });
           }
-        })
-      })
+        });
+      });
     }
   }
 };

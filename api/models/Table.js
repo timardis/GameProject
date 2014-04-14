@@ -43,6 +43,7 @@ module.exports = {
     // 
     // 
 
+    // Initialize game models and behaviors
     newGame: function(cb) {
       Deck.create().done(function(err, deck) {
         deck.init(function() {
@@ -51,6 +52,7 @@ module.exports = {
       });
     },
 
+    // Change turns, player owning 3-S at beginning, next playerId during game
     changeTurn: function(cb) {
       var turnId = this.turnId;
 
@@ -78,6 +80,7 @@ module.exports = {
       this.turnId = turnId;
       this.save(function(err) {
         console.log('Your move, player ' + turnId + '!');
+        cb();
       });
     }
     

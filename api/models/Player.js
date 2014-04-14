@@ -45,14 +45,24 @@ module.exports = {
   		});
   	},
 
+    play: function(cb) {
+      this.hand(function(hand) {
+        hand.combo(function(combo) {
+          combo.play(function() {
+            cb();
+          });
+        });
+      });
+    },
+
     toJSON: function() {
       var obj = this.toObject();
 
       this.hand(function(hand) {
         hand.cards(function(cards) {
           obj.handSize = cards.length;
-        })
-      })
+        });
+      });
 
       return obj;
     }
