@@ -116,7 +116,7 @@ var MainController = {
       player.hand(function(hand) {
         hand.combo(function(combo) {
           combo.add(req.param('cardId'), function() {
-
+            res.json(hand);
           });
         });
       });
@@ -129,7 +129,7 @@ var MainController = {
       player.hand(function(hand) {
         hand.combo(function(combo) {
           combo.remove(req.param('cardId'), function() {
-
+            res.json(hand);
           });
         });
       });

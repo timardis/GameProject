@@ -50,13 +50,13 @@ module.exports = {
         }
       });
 
-      /*this.combo(function(combo) {
+      this.combo(function(combo) {
         combo.cards(function(cards) {
           for (var i = 0; i < cards.length; i++) {
             obj.comboArray.push(cards[i].id);
           }
-        })
-      });*/
+        });
+      });
 
       return obj;
     }
