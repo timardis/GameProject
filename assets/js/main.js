@@ -17,6 +17,7 @@ function init() {
 	stage = new createjs.Stage(canvas)
 	stage.autoClear = false
 	stage.enableDOMEvents(true)
+	stage.enableMouseOver(10)
 
 	initPlayButton()
     initCards()
@@ -86,8 +87,8 @@ function initPlayButton() {
 		frames: {width:60, height:35},
 
 		animations: {
-			active: [0],
-			over: [1],
+			active: [1],
+			over: [0],
 			inactive: [2]
 		}
 	})
@@ -100,6 +101,16 @@ function setPlayButton(state) {
 	playButton = new createjs.Sprite(playSpriteSheet, state)
 	playButton.x = 570
 	playButton.y = 460
+	if(state == "active") {
+		playButton.addEventListener("mouseover", function(event) {
+			setPlayButton("over")
+		})		
+	}
+	else if(state == "over") {
+		playButton.addEventListener("mouseout", function(event) {
+			setPlayButton("active")
+		})	
+	}
 	stage.addChild(playButton)
 	stage.update()
 }
