@@ -104,12 +104,24 @@ function setPlayButton(state) {
 	if(state == "active") {
 		playButton.addEventListener("mouseover", function(event) {
 			setPlayButton("over")
-		})		
+		})
+		playButton.addEventListener("click", function(event) {
+			socket.get("/main/play", {}, function(response) {
+				console.log(response)
+			})
+			setPlayButton("inactive")
+		})
 	}
 	else if(state == "over") {
 		playButton.addEventListener("mouseout", function(event) {
 			setPlayButton("active")
-		})	
+		})
+		playButton.addEventListener("click", function(event) {
+			socket.get("/main/play", {}, function(response) {
+				console.log(response)
+			})
+			setPlayButton("inactive")
+		})
 	}
 	stage.addChild(playButton)
 	stage.update()
