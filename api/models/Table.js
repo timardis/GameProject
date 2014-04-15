@@ -43,8 +43,8 @@ module.exports = {
 
       obj.stackArray = [];
 
-      Player.findOne(turnId).done(function(err, player) {
-        obj.turnId = player.sessionId;
+      Player.findOne(this.turnId).done(function(err, player) {
+        obj.turnSocketId = player.sessionId;
       });
 
       this.stack(function(stack) {
