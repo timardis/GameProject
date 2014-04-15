@@ -56,6 +56,7 @@ module.exports = {
             obj.comboArray.push(cards[i].id);
           }
         });
+        obj.isValid = combo.isValid;
       });
 
       return obj;

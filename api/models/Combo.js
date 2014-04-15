@@ -34,6 +34,18 @@ module.exports = {
       defaultsTo: -1
     },
 
+    // Whether this is a valid combo
+    isValid: {
+      type: 'BOOLEAN',
+      defaultsTo: false
+    },
+
+    // Whether this combo is a valid move on the current stack combo
+    isBetter: {
+      type: 'BOOLEAN',
+      defaultsTo: false
+    },
+
     // Id of the hand this card belongs to
     // Default: -1
   	handId: {
@@ -95,6 +107,90 @@ module.exports = {
       });
     },
 
+    // Determine the type and length of this combo
+    identify: function(cb) {
+      var obj = this.toObject();
+
+      this.cards(function(cards) {
+        // Initialize max and min of array
+        var max, min;
+
+        // If the combo is empty
+        if (cards.length == 0) {
+          obj.type = 'undefined';
+        }
+        // If the combo has 1 card
+        else if (cards.length == 1) {
+          obj.type = 'repeat';
+        }
+        // If the combo has more than 1 card
+        else {
+          // Store max and min values from the hand
+          max = cards[cards.length - 1].id;
+          min = cards[0].id;
+
+          // Determine product of all elements in array
+          var product = arrayProduct(cards);
+
+          // Determine factorial data
+          var maxFac = factorial(Math.floor((cards[cards.length - 1].id-1) / 4) + 2);
+          var minFac = factorial(Math.floor((cards[0].id-1) / 4) + 1);
+
+          // Determine the ratio between the two factorials
+          var ratio = maxFac / minFac;
+
+          // If the product is equal to the first item raised to the power of the array length, this is a repeat
+          if (product == Math.pow(Math.floor((cards[0].id-1) / 4) + 2, cards.length)) {
+            obj.type = 'repeat';
+          }
+
+          // If the product is equal to the ratio, this is a straight
+          else if (product == ratio && cards.length >= 3) {
+            obj.type = 'straight';
+          }
+
+          // If the product is equal to the ratio squared, this is a chop
+          else if (product == Math.pow(ratio, 2) && cards.length >= 6) {
+            obj.type = 'chop';
+          }
+
+          // Otherwise, this is not a valid combo
+          else {
+            obj.type = 'undefined';
+          }
+        }
+
+        // Set properties based on type
+        obj.length = cards.length;
+
+        if (obj.type == 'undefined') {
+          obj.isValid = false;
+          obj.compareValue = -1;
+        }
+        else {
+          obj.isValid = true;
+          obj.compareValue = max;
+        }
+      });
+
+      // Pass property values back to the model and save
+      this.type = obj.type;
+      this.isValid = obj.isValid;
+      this.length = obj.length;
+      this.compareValue = obj.compareValue;
+      this.save(function(err) {
+        console.log('Combo of type ' + obj.type + ' saved!\n\n');
+        cb();
+      });
+    },
+
+    // Update the combo properties when cards are added or removed
+    update: function(topCombo, cb) {
+      this.identify(function() {
+        cb();
+      });
+    },
+
     // Play this combo, updating each card in the hand
     play: function(cb) {
 
@@ -130,4 +226,22 @@ module.exports = {
     
   }
 
+};
+
+function arrayProduct(array) {
+  var product = 1;
+
+  for (var i = 0; i < array.length; i++) {
+    product *= (Math.floor((array[i].id-1) / 4) + 2);
+  }
+
+  return product;
+};
+
+function factorial(n) {
+  if (n <= 1) {
+    return 1;
+  }
+
+  return (n * factorial(n-1));
 };
