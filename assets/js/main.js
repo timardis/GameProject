@@ -10,6 +10,7 @@ var canvas, stage, title,
 	cards = []
 var index, interval, data
 var comboCards = []
+var playButton
 
 function init() {
 	canvas = document.getElementById('gameCanvas')
@@ -17,6 +18,7 @@ function init() {
 	stage.autoClear = false
 	stage.enableDOMEvents(true)
 
+	initPlayButton()
     initCards()
 
     initSocketListeners()
@@ -62,6 +64,7 @@ function displayCard(){
 		index++
 	}
 }
+
 //	Initialize socket.io event listeners
 //
 function initSocketListeners() {
@@ -75,12 +78,36 @@ function initSocketListeners() {
 	})
 }
 
+function initPlayButton() {
+	console.log("initPlayButton")
+	playSpriteSheet = new createjs.SpriteSheet({
+		framerate: 20,
+		images: ["../images/playbutton.png"],
+		frames: {width:60, height:35},
+
+		animations: {
+			active: [0],
+			over: [1],
+			inactive: [2]
+		}
+	})
+
+	setPlayButton("inactive")
+}
+
+function setPlayButton(state) {
+	stage.removeChild(playButton)
+	playButton = new createjs.Sprite(playSpriteSheet, state)
+	playButton.x = 570
+	playButton.y = 460
+	stage.addChild(playButton)
+	stage.update()
+}
+
 //	Initialize array of card Sprites
-//	It's a mess because of the way the cards 
-//	are arranged on the sprite image
 // 
 function initCards() {
-	for(var i = 0; i < 51; i++) {
+	for(var i = 0; i < 52; i++) {
 		comboCards[i] = false;
 	}
 
@@ -89,6 +116,8 @@ function initCards() {
 		images: ["../images/cards.png"],
 		frames: {width:73, height:98}
 	})
+
+	
 
 	for(var i = 0; i < 52; i++)
 	{
@@ -100,17 +129,31 @@ function initCards() {
 			if(comboCards[eventCardId] == false) {
 				comboCards[eventCardId] = true
 				console.log("Card #" + (eventCardId+1) + " added")
-				socket.get('/main/addCombo', {cardId: eventCardId + 1})
+				socket.get('/main/addCombo', {cardId: eventCardId + 1}, function(response){
+					if(response.isValid) {
+						setPlayButton("active")
+					}
+					else {
+						setPlayButton("inactive")
+					}
+				})
 
-				cards[eventCardId].y -= 25
+				event.target.y -= 25
 				stage.update()
 			}
 			else {
 				comboCards[eventCardId] = false
 				console.log("Card #" + (eventCardId+1) + " removed")
-				socket.get('/main/removeCombo', {cardId: eventCardId + 1})
+				socket.get('/main/removeCombo', {cardId: eventCardId + 1}, function(response) {
+					if(response.isValid) {
+						setPlayButton("active")
+					}
+					else {
+						setPlayButton("inactive")
+					}
+				})
 
-				cards[eventCardId].y += 25
+				event.target.y += 25
 				stage.update()	
 			}
 			
