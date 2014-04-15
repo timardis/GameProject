@@ -84,7 +84,7 @@ function initPlayButton() {
 	playSpriteSheet = new createjs.SpriteSheet({
 		framerate: 20,
 		images: ["../images/playbutton.png"],
-		frames: {width:60, height:35},
+		frames: {width:40, height:23},
 
 		animations: {
 			active: [1],
