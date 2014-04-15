@@ -142,7 +142,15 @@ var MainController = {
 
   // Play a combo from a player's hand
   play: function(req, res) {
-
+    Player.findOneBySessionId(req.socket.id).done(function(err, player) {
+      player.play(function() {
+        player.tableOwner(function(table) {
+          table.changeTurn(function() {
+            res.json(table);
+          });
+        });
+      });
+    });
   },
 
   // Pass over a player's turn

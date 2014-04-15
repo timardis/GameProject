@@ -37,6 +37,29 @@ module.exports = {
   		});
   	},
 
+    // Return JSON information
+    toJSON: function() {
+      var obj = this.toObject();
+
+      obj.stackArray = [];
+
+      Player.findOne(turnId).done(function(err, player) {
+        obj.turnId = player.sessionId;
+      });
+
+      this.stack(function(stack) {
+        stack.combo(function(combo) {
+          combo.cards(function(cards) {
+            for (var i = 0; i < cards.length; i++) {
+              obj.stackArray.push(cards[i].id);
+            }
+          });
+        });
+      });
+
+      return obj;
+    },
+
     //
     //
     // GAME LOGIC AND HELPERS

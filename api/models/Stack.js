@@ -24,6 +24,13 @@ module.exports = {
       defaultsTo: -1
     },
 
+    // Call a function on the top combo in the stack
+    combo: function(cb) {
+      Combo.findOne(this.topComboId).done(function(err, combo) {
+        cb(combo);
+      });
+    },
+
   	// Call a function on the combos in the stack
   	combos: function(cb) {
   		Combo.findByStackId(this.id).done(function(err, combos) {
