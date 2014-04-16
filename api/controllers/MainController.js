@@ -74,7 +74,6 @@ var MainController = {
         Combo.create({
           handId: hand.id
         }).done(function(err, combo) {
-          Stack.create().done(function(err, stack) {
             Player.findByTableId(1).done(function(err, players) {
 
               console.log('New player ' + player.playerName + ' playerId: ' + player.id + ' found!');
@@ -84,15 +83,16 @@ var MainController = {
               // If we have 4 players, we can start the game
               if (players.length == 4) {
                  Table.create().done(function(err, table) {
+                    Stack.create().done(function(err, stack) {
                      table.newGame(function() {
                         console.log('Table created, deck loaded, cards dealt!');
                         table.changeTurn(function() {});
                         sails.io.sockets.emit('update');
                      });
+                   });
                  });
               }
             });
-          });
         });
       });
     });

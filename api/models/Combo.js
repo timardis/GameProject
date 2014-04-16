@@ -193,6 +193,8 @@ module.exports = {
 
     // Play this combo, updating each card in the hand
     play: function(cb) {
+      // Store this combo's handId
+      var tempHandId = this.handId;
 
       // Update card properties
       this.cards(function(cards) {
@@ -220,8 +222,12 @@ module.exports = {
         console.log('Combo played!');
       });
 
-      // Callback
-      cb();
+      // Create a new combo for this hand then callback
+      Combo.create({
+        handId: tempHandId
+      }).done(function(err, combo) {
+        cb();
+      });
     }
     
   }
