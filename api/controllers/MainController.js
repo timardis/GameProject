@@ -107,7 +107,12 @@ var MainController = {
   update: function(req, res) {
     Player.findOneBySessionId(req.socket.id).done(function(err, player) {
       player.hand(function(hand) {
-        res.json(hand);
+        player.tableOwner(function(table) {
+          res.json({
+            handJson: hand,
+            tableJson: table
+          });
+        });
       });
     });
   },
