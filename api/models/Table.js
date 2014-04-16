@@ -49,11 +49,13 @@ module.exports = {
 
       this.stack(function(stack) {
         stack.combo(function(combo) {
-          combo.cards(function(cards) {
-            for (var i = 0; i < cards.length; i++) {
-              obj.stackArray.push(cards[i].id);
-            }
-          });
+          if (typeof combo !== "undefined") {
+            combo.cards(function(cards) {
+              for (var i = 0; i < cards.length; i++) {
+                obj.stackArray.push(cards[i].id);
+              }
+            });
+          }
         });
       });
 
