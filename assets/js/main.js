@@ -71,7 +71,7 @@ function displayCard(){
 function initSocketListeners() {
 	socket.on('update', function(data) {
 		socket.get('/main/update', {}, function(response) {
-			var mainHandArray = response.handArray
+			var mainHandArray = response.handJson.handArray
 			for(var i = 0; i < mainHandArray.length; i++) {
 				showCard(mainHandArray[i], 300 + 15*i, 400)
 			}

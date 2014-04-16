@@ -167,6 +167,10 @@ module.exports = {
           obj.isValid = false;
           obj.compareValue = -1;
         }
+        else if (obj.type == 'repeat') {
+          obj.isValid = true;
+          obj.compareValue = cards[0].id;
+        }
         else {
           obj.isValid = true;
           obj.compareValue = max;
@@ -184,10 +188,53 @@ module.exports = {
       });
     },
 
-    // Update the combo properties when cards are added or removed
-    update: function(topCombo, cb) {
-      this.identify(function() {
+    // Test to see if this combo is superior to the current combo on the stack
+    compare: function(cb) {
+      var obj = this.toObject();
+
+      Stack.findOne(1).done(function(err, stack) {
+        stack.combo(function(combo) {
+
+          // If this is the first turn of the game, this combo MUST contain the 3 of Spades
+          if (typeof combo == "undefined") {
+            Card.findOne(1).done(function(err, card) {
+              if (card.comboId == obj.id) {
+                obj.isBetter = true;
+              }
+              else {
+                obj.isBetter = false;
+              }
+            });
+          }
+
+          // Otherwise, this combo's type and length must be the same as the top combo, and the compare value must be greater
+          else {
+            if (obj.type == combo.type && obj.length == combo.length && obj.compareValue > combo.compareValue) {
+              obj.isBetter = true;
+            }
+            else {
+              obj.isBetter = false;
+            }
+          }
+        });
+      });
+
+      // Pass isBetter value back to the model and save
+      console.log('Is better: ' + obj.isBetter);
+      this.isBetter = obj.isBetter;
+      this.save(function(err) {
         cb();
+      });
+    },
+
+    // Update the combo properties when cards are added or removed
+    update: function(cb) {
+      this.identify(function() {
+
+      });
+
+      this.compare(function() {
+
       });
     },
 

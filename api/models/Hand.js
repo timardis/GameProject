@@ -57,6 +57,7 @@ module.exports = {
           }
         });
         obj.isValid = combo.isValid;
+        obj.isBetter = combo.isBetter;
       });
 
       return obj;

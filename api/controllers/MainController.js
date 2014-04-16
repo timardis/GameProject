@@ -110,7 +110,8 @@ var MainController = {
         player.tableOwner(function(table) {
           res.json({
             handJson: hand,
-            tableJson: table
+            tableJson: table,
+            socketId: req.socket.id
           });
         });
       });
@@ -123,7 +124,7 @@ var MainController = {
       player.hand(function(hand) {
         hand.combo(function(combo) {
           combo.add(req.param('cardId'), function() {
-            combo.identify(function() {
+            combo.update(function() {
               res.json(hand);
             });
           });
@@ -138,7 +139,7 @@ var MainController = {
       player.hand(function(hand) {
         hand.combo(function(combo) {
           combo.remove(req.param('cardId'), function() {
-            combo.identify(function() {
+            combo.update(function() {
               res.json(hand);
             });
           });
@@ -153,7 +154,7 @@ var MainController = {
       player.play(function() {
         player.tableOwner(function(table) {
           table.changeTurn(function() {
-            res.json(table);
+            sails.io.sockets.emit('update');
           });
         });
       });
