@@ -207,6 +207,11 @@ module.exports = {
             });
           }
 
+          // If the other 3 players have passed, any combo will suffice
+          else if (combo.compareValue == 0) {
+            obj.isBetter = true;
+          }
+
           // Otherwise, this combo's type and length must be the same as the top combo, and the compare value must be greater
           else {
             if (obj.type == combo.type && obj.length == combo.length && obj.compareValue > combo.compareValue) {
