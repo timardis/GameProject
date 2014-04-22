@@ -239,7 +239,7 @@ module.exports = {
       });
 
       this.compare(function() {
-
+        cb();
       });
     },
 
