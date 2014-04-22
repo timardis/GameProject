@@ -92,12 +92,31 @@ module.exports = {
       });
     },
 
+    // Return the number of cards in the other players' hands
     toJSON: function() {
       var obj = this.toObject();
 
-      this.hand(function(hand) {
-        hand.cards(function(cards) {
-          obj.handSize = cards.length;
+      Player.findOne(this.leftId).done(function(err, player) {
+        player.hand(function(hand) {
+          hand.cards(function(cards) {
+            obj.leftHandSize = cards.length;
+          });
+        });
+      });
+
+      Player.findOne(this.crossId).done(function(err, player) {
+        player.hand(function(hand) {
+          hand.cards(function(cards) {
+            obj.crossHandSize = cards.length;
+          });
+        });
+      });
+
+      Player.findOne(this.rightId).done(function(err, player) {
+        player.hand(function(hand) {
+          hand.cards(function(cards) {
+            obj.rightHandSize = cards.length;
+          });
         });
       });
 

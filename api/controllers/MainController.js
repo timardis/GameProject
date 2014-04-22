@@ -114,6 +114,7 @@ var MainController = {
           res.json({
             handJson: hand,
             tableJson: table,
+            playerJson: player,
             socketId: req.socket.id
           });
         });
