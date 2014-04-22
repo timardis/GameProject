@@ -42,7 +42,10 @@ var refreshSockets = function() {
     }
   })
 
-  }
+}
+
+// Count number of passed turns
+var passCount = 0;
 
 var MainController = {
     socketArray: {},
@@ -110,7 +113,8 @@ var MainController = {
         player.tableOwner(function(table) {
           res.json({
             handJson: hand,
-            tableJson: table
+            tableJson: table,
+            socketId: req.socket.id
           });
         });
       });
@@ -123,7 +127,7 @@ var MainController = {
       player.hand(function(hand) {
         hand.combo(function(combo) {
           combo.add(req.param('cardId'), function() {
-            combo.identify(function() {
+            combo.update(function() {
               res.json(hand);
             });
           });
@@ -138,7 +142,7 @@ var MainController = {
       player.hand(function(hand) {
         hand.combo(function(combo) {
           combo.remove(req.param('cardId'), function() {
-            combo.identify(function() {
+            combo.update(function() {
               res.json(hand);
             });
           });
@@ -153,7 +157,7 @@ var MainController = {
       player.play(function() {
         player.tableOwner(function(table) {
           table.changeTurn(function() {
-            res.json(table);
+            sails.io.sockets.emit('update');
           });
         });
       });
@@ -162,7 +166,27 @@ var MainController = {
 
   // Pass over a player's turn
   pass: function(req, res) {
+    passCount++;
 
+    // If all 3 other players passed, clear the compare value of the top combo on the stack
+    if (passCount == 3) {
+      Stack.findOne(1).done(function(err, stack) {
+        stack.combo(function(combo) {
+          combo.compareValue = 0;
+          combo.save(function(err) {
+            sails.io.sockets.emit('update');
+          });
+        });
+      });
+    }
+
+    else {
+      Table.findOne(1).done(function(err, table) {
+        table.changeTurn(function() {
+          sails.io.sockets.emit('update');
+        });
+      });
+    }
   },
 
   /**
