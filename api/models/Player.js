@@ -31,6 +31,19 @@ module.exports = {
       defaultsTo: 1
     },
 
+    // Id's of the players to the left, right and across
+    leftId: {
+      type: 'INTEGER'
+    },
+
+    rightId: {
+      type: 'INTEGER'
+    },
+
+    crossId: {
+      type: 'INTEGER'
+    },
+
   	// Call a function on the player's hand
   	hand: function(cb) {
   		Hand.findOneByPlayerId(this.id).done(function(err, hand) {
@@ -45,6 +58,7 @@ module.exports = {
   		});
   	},
 
+    // Play the combo in the player's hand
     play: function(cb) {
       this.hand(function(hand) {
         hand.combo(function(combo) {
@@ -52,6 +66,29 @@ module.exports = {
             cb();
           });
         });
+      });
+    },
+
+    // Pass over the player's turn, return a random card from the stack to their hand (if the stack has any cards)
+    pass: function(cb) {
+      var obj = this.toObject();
+
+      Card.findByStackId(1).done(function(err, cards) {
+        if (cards.length > 0) {
+          var pos = Math.floor(Math.random() * cards.length);
+          cards[pos].handId = obj.id;
+          cards[pos].stackId = -1;
+          cards[pos].comboId = -1;
+
+          cards[pos].save(function(err) {
+            console.log('Card ' + cards[pos].id + ' given to player ' + obj.id + '!\n\n');
+            cb();
+          });
+        }
+
+        else {
+          cb();
+        }
       });
     },
 

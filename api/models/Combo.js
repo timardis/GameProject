@@ -265,6 +265,10 @@ module.exports = {
         for (var i = 0; i < cards.length; i++) {
           cards[i].stackId = 1;
           cards[i].handId = -1;
+
+          cards[i].save(function(err) {
+
+          });
         }
       });
 
