@@ -9,8 +9,9 @@ var canvas, stage, title,
 	cardsSpriteSheet,
 	cards = []
 var index, interval, data
-var comboCards = []
+var comboCards = [], mainHandArray = []
 var playButton
+var currentTurn, comboIsValid
 
 function init() {
 	canvas = document.getElementById('gameCanvas')
@@ -18,6 +19,9 @@ function init() {
 	stage.autoClear = false
 	stage.enableDOMEvents(true)
 	stage.enableMouseOver(10)
+
+	currentTurn = false
+	comboIsValid = false
 
 	initPlayButton()
     initCards()
@@ -54,6 +58,11 @@ function showCard(value, xVal, yVal) {
 	stage.update()
 }
 
+function unshowCard(value) {
+	stage.removeChild(cards[value - 1])
+	stage.update()
+}
+
 //	experimental helper function to show deck of cards
 function displayCard(){
 	if(index < 52)
@@ -71,7 +80,28 @@ function displayCard(){
 function initSocketListeners() {
 	socket.on('update', function(data) {
 		socket.get('/main/update', {}, function(response) {
-			var mainHandArray = response.handArray
+			if(response.tableJson.turnSocketId == socket.socket.sessionid) {
+				console.log("It's my turn now!")
+				currentTurn = true
+			}
+			else {
+				currentTurn = false
+			}
+
+			if(comboIsValid && currentTurn) {
+				setPlayButton("active")
+			}
+			else {
+				setPlayButton("inactive")
+			}
+
+			if(mainHandArray.length > 0) {
+				for(var i = 0; i < mainHandArray.length; i++) {
+					unshowCard(mainHandArray[i])
+				}
+			}
+
+			mainHandArray = response.handJson.handArray
 			for(var i = 0; i < mainHandArray.length; i++) {
 				showCard(mainHandArray[i], 300 + 15*i, 400)
 			}
@@ -105,26 +135,27 @@ function setPlayButton(state) {
 		playButton.addEventListener("mouseover", function(event) {
 			setPlayButton("over")
 		})
-		playButton.addEventListener("click", function(event) {
-			socket.get("/main/play", {}, function(response) {
-				console.log(response)
-			})
-			setPlayButton("inactive")
-		})
+		playButton.addEventListener("click", handleClick)
 	}
 	else if(state == "over") {
 		playButton.addEventListener("mouseout", function(event) {
 			setPlayButton("active")
 		})
-		playButton.addEventListener("click", function(event) {
-			socket.get("/main/play", {}, function(response) {
-				console.log(response)
-			})
-			setPlayButton("inactive")
-		})
+		playButton.addEventListener("click", handleClick)
+	}
+	else if(state == "inactive") {
+		playButton.removeAllEventListeners()
 	}
 	stage.addChild(playButton)
 	stage.update()
+}
+
+function handleClick(event) {
+	playButton.removeAllEventListeners()
+	socket.get("/main/play", {}, function(response) {
+		console.log(response)
+	})
+	setPlayButton("inactive")
 }
 
 //	Initialize array of card Sprites
@@ -153,7 +184,8 @@ function initCards() {
 				comboCards[eventCardId] = true
 				console.log("Card #" + (eventCardId+1) + " added")
 				socket.get('/main/addCombo', {cardId: eventCardId + 1}, function(response){
-					if(response.isValid) {
+					comboIsValid = response.isValid
+					if(comboIsValid && currentTurn) {
 						setPlayButton("active")
 					}
 					else {
@@ -168,7 +200,8 @@ function initCards() {
 				comboCards[eventCardId] = false
 				console.log("Card #" + (eventCardId+1) + " removed")
 				socket.get('/main/removeCombo', {cardId: eventCardId + 1}, function(response) {
-					if(response.isValid) {
+					comboIsValid = response.isValid
+					if(comboIsValid && currentTurn) {
 						setPlayButton("active")
 					}
 					else {
