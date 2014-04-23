@@ -80,6 +80,9 @@ function displayCard(){
 function initSocketListeners() {
 	socket.on('update', function(data) {
 		socket.get('/main/update', {}, function(response) {
+			console.log('socket get update')
+			console.log(response)
+
 			if(response.tableJson.turnSocketId == socket.socket.sessionid) {
 				console.log("It's my turn now!")
 				currentTurn = true
@@ -153,6 +156,7 @@ function setPlayButton(state) {
 function handleClick(event) {
 	playButton.removeAllEventListeners()
 	socket.get("/main/play", {}, function(response) {
+		console.log('socket get play')
 		console.log(response)
 	})
 	setPlayButton("inactive")
@@ -183,7 +187,11 @@ function initCards() {
 			if(comboCards[eventCardId] == false) {
 				comboCards[eventCardId] = true
 				console.log("Card #" + (eventCardId+1) + " added")
+				console.log('new code')
 				socket.get('/main/addCombo', {cardId: eventCardId + 1}, function(response){
+					console.log('socket get addCombo')
+					console.log(response)
+
 					comboIsValid = response.isValid
 					if(comboIsValid && currentTurn) {
 						setPlayButton("active")
@@ -200,6 +208,9 @@ function initCards() {
 				comboCards[eventCardId] = false
 				console.log("Card #" + (eventCardId+1) + " removed")
 				socket.get('/main/removeCombo', {cardId: eventCardId + 1}, function(response) {
+					console.log('socket get removeCombo')
+					console.log(response)
+
 					comboIsValid = response.isValid
 					if(comboIsValid && currentTurn) {
 						setPlayButton("active")
