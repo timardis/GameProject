@@ -1,7 +1,7 @@
 /*;
 *	main.js: Front-end javaScript for the main game page;
 *
-*/;
+*/
 
 //	Global variables;
 var canvas, stage, title,
@@ -10,8 +10,10 @@ var canvas, stage, title,
 	cards = [];
 var index, interval, data;
 var comboCards = [], mainHandArray = [];
-var playButton;
+var playButton, passButton;
 var currentTurn, comboIsValid, comboIsBetter;
+var cardsX = 300, cardsY = 400;
+var cardsGap = 15;
 
 function init() {
 	canvas = document.getElementById('gameCanvas');
@@ -29,6 +31,8 @@ function init() {
 	comboIsValid = false;
 
 	initPlayButton();
+	initPassButton();
+
     initCards();
 
     initSocketListeners();
@@ -68,18 +72,6 @@ function unshowCard(value) {
 	stage.update();
 }
 
-//	experimental helper function to show deck of cards;
-function displayCard(){
-	if(index < 52);
-	{
-		cards[index].x = 100 + index * 15;
-		cards[index].y = 100;
-		stage.addChild(cards[index]);
-
-		index++;
-	}
-}
-
 //	Initialize socket.io event listeners;
 //;
 function initSocketListeners() {
@@ -94,6 +86,13 @@ function initSocketListeners() {
 			}
 			else {
 				currentTurn = false;
+			}
+
+			if(currentTurn) {
+				setPassButton("active");
+			}
+			else {
+				setPassButton("inactive");
 			}
 
 			if(comboIsValid && comboIsBetter && currentTurn) {
@@ -111,7 +110,7 @@ function initSocketListeners() {
 
 			mainHandArray = response.handJson.handArray;
 			for(var i = 0; i < mainHandArray.length; i++) {
-				showCard(mainHandArray[i], 300 + 15*i, 400);
+				showCard(mainHandArray[i], cardsX + cardsGap*i, cardsY);
 			}
 		});
 	});
@@ -137,19 +136,19 @@ function initPlayButton() {
 function setPlayButton(state) {
 	stage.removeChild(playButton);
 	playButton = new createjs.Sprite(playSpriteSheet, state);
-	playButton.x = 570;
-	playButton.y = 460;
+	playButton.x = cardsX + 150;
+	playButton.y = cardsY + 115;
 	if(state == "active") {
 		playButton.addEventListener("mouseover", function(event) {
 			setPlayButton("over");
 		});
-		playButton.addEventListener("click", handleClick);
+		playButton.addEventListener("click", handlePlayClick);
 	}
 	else if(state == "over") {
 		playButton.addEventListener("mouseout", function(event) {
 			setPlayButton("active");
 		});
-		playButton.addEventListener("click", handleClick);
+		playButton.addEventListener("click", handlePlayClick);
 	}
 	else if(state == "inactive") {
 		playButton.removeAllEventListeners();
@@ -158,7 +157,7 @@ function setPlayButton(state) {
 	stage.update();
 }
 
-function handleClick(event) {
+function handlePlayClick(event) {
 	playButton.removeAllEventListeners();
 	comboIsBetter = false;
 	comboIsValid = false;
@@ -167,6 +166,55 @@ function handleClick(event) {
 		console.log(response);
 	});
 	setPlayButton("inactive");
+}
+
+function initPassButton() {
+	console.log("initPassButton");
+	passSpriteSheet = new createjs.SpriteSheet({
+		framerate: 20,
+		images: ["../images/passbutton.png"],
+		frames: {width:40, height:23},
+
+		animations: {
+			active: [1],
+			over: [0],
+			inactive: [2]
+		}
+	});
+
+	setPassButton("inactive");
+}
+
+function setPassButton(state) {
+	stage.removeChild(passButton);
+	passButton = new createjs.Sprite(passSpriteSheet, state);
+	passButton.x = playButton.x + 50;
+	passButton.y = playButton.y;
+	if(state == "active") {
+		passButton.addEventListener("mouseover", function(event) {
+			setPassButton("over");
+		});
+		passButton.addEventListener("click", handlePassClick);
+	}
+	else if(state == "over") {
+		passButton.addEventListener("mouseout", function(event) {
+			setPassButton("active");
+		});
+		passButton.addEventListener("click", handlePassClick);
+	}
+	else if(state == "inactive") {
+		passButton.removeAllEventListeners();
+	}
+	stage.addChild(passButton);
+	stage.update();
+}
+
+function handlePassClick(event) {
+	passButton.removeAllEventListeners();
+	comboIsBetter = false;
+	comboIsValid = false;
+	socket.get("/main/pass", {}, function() {});
+	setPassButton("inactive");
 }
 
 //	Initialize array of card Sprites;
