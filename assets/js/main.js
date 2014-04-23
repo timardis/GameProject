@@ -160,6 +160,8 @@ function setPlayButton(state) {
 
 function handleClick(event) {
 	playButton.removeAllEventListeners();
+	comboIsBetter = false;
+	comboIsValid = false;
 	socket.get("/main/play", {}, function(response) {
 		console.log('socket get play');
 		console.log(response);
@@ -219,7 +221,7 @@ function initCards() {
 
 					comboIsValid = response.isValid;
 					comboIsBetter = response.isBetter;
-					if(comboIsValid && currentTurn) {
+					if(comboIsValid && comboIsBetter && currentTurn) {
 						setPlayButton("active");
 					}
 					else {
