@@ -125,15 +125,10 @@ var MainController = {
   // Add a card to the player's combo
   addCombo: function(req, res) {
     Player.findOneBySessionId(req.socket.id).done(function(err, player) {
-      console.log('findOne')
       player.hand(function(hand) {
-        console.log('hand')
         hand.combo(function(combo) {
-          console.log('hand.combo')
           combo.add(req.param('cardId'), function() {
-            console.log('combo.add')
             combo.update(function() {
-              console.log('combo.update')
               res.json(hand);
             });
           });
