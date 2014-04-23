@@ -146,12 +146,24 @@ module.exports = {
 
           // If the product is equal to the ratio, this is a straight
           else if (product == ratio && cards.length >= 3) {
-            obj.type = 'straight';
+            // 2's can't be part of a straight
+            if (cards[cards.length - 1].id >= 49) {
+              obj.type = 'undefined';
+            }
+            else {
+              obj.type = 'straight';
+            }
           }
 
           // If the product is equal to the ratio squared, this is a chop
           else if (product == Math.pow(ratio, 2) && cards.length >= 6) {
-            obj.type = 'chop';
+            // 2's can't be part of a chop
+            if (cards[cards.length - 1].id >= 49) {
+              obj.type = 'undefined';
+            }
+            else {
+              obj.type = 'chop';
+            }
           }
 
           // Otherwise, this is not a valid combo
@@ -239,7 +251,7 @@ module.exports = {
       });
 
       this.compare(function() {
-
+        cb();
       });
     },
 
@@ -253,6 +265,10 @@ module.exports = {
         for (var i = 0; i < cards.length; i++) {
           cards[i].stackId = 1;
           cards[i].handId = -1;
+
+          cards[i].save(function(err) {
+
+          });
         }
       });
 

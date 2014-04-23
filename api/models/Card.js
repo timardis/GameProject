@@ -37,7 +37,7 @@ module.exports = {
     },
 
     // Id of the stack this card belongs to
-    // Default: 1
+    // Default: -1
   	stackId: {
       type: 'INTEGER',
       defaultsTo: -1

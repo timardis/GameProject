@@ -70,9 +70,11 @@ module.exports = {
 
     // Initialize game models and behaviors
     newGame: function(cb) {
-      Deck.create().done(function(err, deck) {
-        deck.init(function() {
-          cb();
+      this.assignSeats(function() {
+        Deck.create().done(function(err, deck) {
+          deck.init(function() {
+            cb();
+          });
         });
       });
     },
@@ -106,6 +108,42 @@ module.exports = {
       this.save(function(err) {
         console.log('Your move, player ' + turnId + '!');
         cb();
+      });
+    },
+
+    // Assign players seats (set their left, right, and cross players)
+    assignSeats: function(cb) {
+      this.players(function(players) {
+        for (var i = 0; i < 4; i++) {
+          var id = players[i].id;
+
+          if (id == 1) {
+            players[i].leftId = 2;
+            players[i].crossId = 3;
+            players[i].rightId = 4;
+          }
+          else if (id == 2) {
+            players[i].leftId = 3;
+            players[i].crossId = 4;
+            players[i].rightId = 1;
+          }
+          else if (id == 3) {
+            players[i].leftId = 4;
+            players[i].crossId = 1;
+            players[i].rightId = 2;
+          }
+          else {
+            players[i].leftId = 1;
+            players[i].crossId = 2;
+            players[i].rightId = 3;
+          }
+
+          players[i].save(function(err) {
+            if (i == 3) {
+              cb();
+            }
+          });
+        }
       });
     }
     

@@ -114,6 +114,7 @@ var MainController = {
           res.json({
             handJson: hand,
             tableJson: table,
+            playerJson: player,
             socketId: req.socket.id
           });
         });
@@ -174,24 +175,27 @@ var MainController = {
     passCount++;
 
     // If all 3 other players passed, clear the compare value of the top combo on the stack
-    if (passCount == 3) {
-      Stack.findOne(1).done(function(err, stack) {
-        stack.combo(function(combo) {
-          combo.compareValue = 0;
-          combo.save(function(err) {
+    Player.findOneBySessionId(req.socket.id).done(function(err, player) {
+      player.pass(function() {
+        if (passCount == 3) {
+          passCount = 0;
+          Stack.findOne(1).done(function(err, stack) {
+            stack.combo(function(combo) {
+              combo.compareValue = 0;
+              combo.save(function(err) {
+
+              });
+            });
+          });
+        }
+
+        Table.findOne(1).done(function(err, table) {
+          table.changeTurn(function() {
             sails.io.sockets.emit('update');
           });
         });
       });
-    }
-
-    else {
-      Table.findOne(1).done(function(err, table) {
-        table.changeTurn(function() {
-          sails.io.sockets.emit('update');
-        });
-      });
-    }
+    });
   },
 
   /**
